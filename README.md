@@ -11,7 +11,7 @@ Tecnologías utilizadas:
 - React Router
 - LocalStorage
 - CSS
-- 
+  
 Instalación y ejecución local:
 
 Clonar el repositorio:
