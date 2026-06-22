@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
+  const ctx = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  if (!ctx) return null;
+
+  const { login } = ctx;
+
   // estados del formulario
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
 
-  // errores
   const [error, setError] = useState("");
 
-  // credenciales simuladas 
   const credenciales = {
     user: "admin",
     pass: "1234",
@@ -18,31 +25,23 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-
     setError("");
 
-    // validación básica
     if (!usuario || !password) {
       setError("Completa todos los campos");
       return;
     }
 
-    // validar credenciales
     if (
       usuario === credenciales.user &&
       password === credenciales.pass
     ) {
-      // crear sesión
-      const session = {
+      login({
         nombre: credenciales.nombre,
         rol: credenciales.rol,
-      };
+      });
 
-      // guardar en localStorage
-      localStorage.setItem("session", JSON.stringify(session));
-
-      // redirigir 
-      window.location.href = "/dashboard";
+      navigate("/dashboard");
     } else {
       setError("Credenciales incorrectas");
     }
