@@ -6,14 +6,10 @@ export default function Login() {
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
-  if (!ctx) return null;
+  const login = ctx?.login;
 
-  const { login } = ctx;
-
-  // estados del formulario
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
-
   const [error, setError] = useState("");
 
   const credenciales = {
@@ -36,7 +32,7 @@ export default function Login() {
       usuario === credenciales.user &&
       password === credenciales.pass
     ) {
-      login({
+      login?.({
         nombre: credenciales.nombre,
         rol: credenciales.rol,
       });
