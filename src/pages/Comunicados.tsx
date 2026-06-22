@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import type { Comunicado } from "../types/Comunicado";
 
 export default function Comunicados() {
@@ -11,20 +12,43 @@ export default function Comunicados() {
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
 
+  // búsqueda
+  const [busqueda, setBusqueda] = useState("");
+
   // cargar desde localStorage
   useEffect(() => {
     const data = localStorage.getItem("comunicados");
-    if (data) setLista(JSON.parse(data));
+
+    if (data) {
+      setLista(JSON.parse(data));
+    }
   }, []);
 
   // guardar en localStorage
   useEffect(() => {
-    localStorage.setItem("comunicados", JSON.stringify(lista));
+    localStorage.setItem(
+      "comunicados",
+      JSON.stringify(lista)
+    );
   }, [lista]);
+
+  // limpiar formulario
+  const limpiarFormulario = () => {
+    setTitulo("");
+    setDescripcion("");
+    setCategoria("");
+    setDestacado(false);
+  };
 
   // agregar comunicado
   const agregar = () => {
-    if (!titulo || !descripcion || !categoria) return;
+    if (
+      !titulo ||
+      !descripcion ||
+      !categoria
+    ) {
+      return;
+    }
 
     const nuevo: Comunicado = {
       id: crypto.randomUUID(),
@@ -40,14 +64,21 @@ export default function Comunicados() {
     limpiarFormulario();
   };
 
-  // eliminar comunicado
+  // eliminar
   const eliminar = (id: string) => {
-    setLista(lista.filter((item) => item.id !== id));
+    setLista(
+      lista.filter(
+        (item) => item.id !== id
+      )
+    );
   };
 
-  // iniciar edición
-  const iniciarEdicion = (c: Comunicado) => {
+  // editar
+  const iniciarEdicion = (
+    c: Comunicado
+  ) => {
     setEditandoId(c.id);
+
     setTitulo(c.titulo);
     setDescripcion(c.descripcion);
     setCategoria(c.categoria);
@@ -73,16 +104,24 @@ export default function Comunicados() {
     );
 
     setEditandoId(null);
+
     limpiarFormulario();
   };
 
-  // limpiar formulario
-  const limpiarFormulario = () => {
-    setTitulo("");
-    setDescripcion("");
-    setCategoria("");
-    setDestacado(false);
-  };
+  // filtrar búsqueda
+  const listaFiltrada = lista.filter(
+    (c) =>
+      c.titulo
+        .toLowerCase()
+        .includes(
+          busqueda.toLowerCase()
+        ) ||
+      c.categoria
+        .toLowerCase()
+        .includes(
+          busqueda.toLowerCase()
+        )
+  );
 
   return (
     <div>
@@ -91,53 +130,120 @@ export default function Comunicados() {
       <input
         placeholder="Título"
         value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
+        onChange={(e) =>
+          setTitulo(e.target.value)
+        }
       />
 
       <input
         placeholder="Descripción"
         value={descripcion}
-        onChange={(e) => setDescripcion(e.target.value)}
+        onChange={(e) =>
+          setDescripcion(
+            e.target.value
+          )
+        }
       />
 
       <input
         placeholder="Categoría"
         value={categoria}
-        onChange={(e) => setCategoria(e.target.value)}
+        onChange={(e) =>
+          setCategoria(
+            e.target.value
+          )
+        }
       />
 
       <label>
         Destacado:
+
         <input
           type="checkbox"
           checked={destacado}
-          onChange={(e) => setDestacado(e.target.checked)}
+          onChange={(e) =>
+            setDestacado(
+              e.target.checked
+            )
+          }
         />
       </label>
 
       {editandoId ? (
-        <button onClick={guardarEdicion}>Guardar cambios</button>
+        <button
+          onClick={guardarEdicion}
+        >
+          Guardar cambios
+        </button>
       ) : (
-        <button onClick={agregar}>Agregar</button>
+        <button onClick={agregar}>
+          Agregar
+        </button>
       )}
 
       <hr />
 
-      {lista.map((c) => (
+      <input
+        placeholder="Buscar por título o categoría"
+        value={busqueda}
+        onChange={(e) =>
+          setBusqueda(
+            e.target.value
+          )
+        }
+      />
+
+      <hr />
+
+      {listaFiltrada.map((c) => (
         <div key={c.id}>
           <h3>{c.titulo}</h3>
-          <p>{c.descripcion}</p>
-          <p>Categoría: {c.categoria}</p>
-          <p>Fecha: {new Date(c.fecha).toLocaleDateString()}</p>
-          <p>Destacado: {c.destacado ? "Sí" : "No"}</p>
 
-          <button onClick={() => iniciarEdicion(c)}>
+          <p>{c.descripcion}</p>
+
+          <p>
+            Categoría: {c.categoria}
+          </p>
+
+          <p>
+            Fecha:{" "}
+            {new Date(
+              c.fecha
+            ).toLocaleDateString()}
+          </p>
+
+          <p>
+            Destacado:{" "}
+            {c.destacado
+              ? "Sí"
+              : "No"}
+          </p>
+
+          <button
+            onClick={() =>
+              iniciarEdicion(c)
+            }
+          >
             Editar
           </button>
 
-          <button onClick={() => eliminar(c.id)}>
+          <button
+            onClick={() =>
+              eliminar(c.id)
+            }
+          >
             Eliminar
           </button>
+
+          <Link
+            to={`/comunicado/${c.id}`}
+          >
+            <button>
+              Ver detalle
+            </button>
+          </Link>
+
+          <hr />
         </div>
       ))}
     </div>

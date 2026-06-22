@@ -4,6 +4,7 @@ import Dashboard from "./pages/Dashboard";
 import Comunicados from "./pages/Comunicados";
 import Reuniones from "./pages/Reuniones";
 import Actividades from "./pages/Actividades";
+import DetalleComunicado from "./pages/DetalleComunicado";
 import ProtectedRoute from "./routes/ProtectedRoute";
 
 function App() {
@@ -11,11 +12,17 @@ function App() {
 
   return (
     <Routes>
+      {/* Login */}
       <Route
         path="/"
-        element={session ? <Navigate to="/dashboard" /> : <Login />}
+        element={
+          session
+            ? <Navigate to="/dashboard" />
+            : <Login />
+        }
       />
 
+      {/* Dashboard */}
       <Route
         path="/dashboard"
         element={
@@ -25,6 +32,7 @@ function App() {
         }
       />
 
+      {/* Comunicados */}
       <Route
         path="/comunicados"
         element={
@@ -34,6 +42,17 @@ function App() {
         }
       />
 
+      {/* Detalle comunicado (useParams) */}
+      <Route
+        path="/comunicado/:id"
+        element={
+          <ProtectedRoute>
+            <DetalleComunicado />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* Reuniones */}
       <Route
         path="/reuniones"
         element={
@@ -43,6 +62,7 @@ function App() {
         }
       />
 
+      {/* Actividades */}
       <Route
         path="/actividades"
         element={
