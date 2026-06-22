@@ -8,7 +8,7 @@ export default function Login() {
   // errores
   const [error, setError] = useState("");
 
-  // credenciales simuladas (esto pide la rúbrica)
+  // credenciales simuladas 
   const credenciales = {
     user: "admin",
     pass: "1234",
@@ -41,7 +41,7 @@ export default function Login() {
       // guardar en localStorage
       localStorage.setItem("session", JSON.stringify(session));
 
-      // redirigir (por ahora simple)
+      // redirigir 
       window.location.href = "/dashboard";
     } else {
       setError("Credenciales incorrectas");
