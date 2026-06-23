@@ -10,19 +10,19 @@ export default function Navbar() {
   const { user, logout } = ctx;
 
   return (
-    <div style={styles.navbar}>
+    <div className="navbar">
       <div>
-        <b>Intranet Jardín</b>
+        <b>🏫 Intranet Jardín</b>
       </div>
 
-      <div style={styles.links}>
+      <div className="nav-links">
         <Link to="/dashboard">Inicio</Link>
         <Link to="/comunicados">Comunicados</Link>
         <Link to="/reuniones">Reuniones</Link>
         <Link to="/actividades">Actividades</Link>
       </div>
 
-      <div style={styles.user}>
+      <div className="nav-user">
         <span>{user?.nombre}</span>
 
         <button onClick={logout}>
@@ -32,22 +32,3 @@ export default function Navbar() {
     </div>
   );
 }
-
-const styles = {
-  navbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    padding: "10px 20px",
-    borderBottom: "1px solid #ccc",
-    alignItems: "center",
-  },
-  links: {
-    display: "flex",
-    gap: "15px",
-  },
-  user: {
-    display: "flex",
-    gap: "10px",
-    alignItems: "center",
-  },
-};

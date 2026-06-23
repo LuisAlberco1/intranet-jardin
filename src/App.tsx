@@ -1,4 +1,6 @@
 import { Routes, Route, Navigate } from "react-router-dom";
+import { useContext } from "react";
+
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Comunicados from "./pages/Comunicados";
@@ -7,23 +9,24 @@ import Actividades from "./pages/Actividades";
 import DetalleComunicado from "./pages/DetalleComunicado";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import Navbar from "./components/Navbar";
+import { AuthContext } from "./context/AuthContext";
 
 function App() {
-  const session = localStorage.getItem("session");
+  const ctx = useContext(AuthContext);
+
+  const user = ctx?.user;
 
   return (
     <>
-      {/* Navbar global solo si hay sesión */}
-      {session && <Navbar />}
+      {/* Navbar global */}
+      {user && <Navbar />}
 
       <Routes>
         {/* Login */}
         <Route
           path="/"
           element={
-            session
-              ? <Navigate to="/dashboard" />
-              : <Login />
+            user ? <Navigate to="/dashboard" replace /> : <Login />
           }
         />
 
@@ -47,7 +50,7 @@ function App() {
           }
         />
 
-        {/* Detalle comunicado */}
+        {/* Detalle */}
         <Route
           path="/comunicado/:id"
           element={
@@ -76,6 +79,9 @@ function App() {
             </ProtectedRoute>
           }
         />
+
+        {/* fallback */}
+        <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
   );

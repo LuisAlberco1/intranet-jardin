@@ -21,6 +21,7 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
+
     setError("");
 
     if (!usuario || !password) {
@@ -44,28 +45,45 @@ export default function Login() {
   };
 
   return (
-    <div style={{ maxWidth: "300px", margin: "auto" }}>
-      <h2>Login Intranet</h2>
+    <div className="login-container">
+      <div className="login-card">
 
-      <form onSubmit={handleLogin}>
-        <input
-          type="text"
-          placeholder="Usuario"
-          value={usuario}
-          onChange={(e) => setUsuario(e.target.value)}
-        />
+        <h2>🏫 Login Intranet</h2>
 
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <form
+          className="login-form"
+          onSubmit={handleLogin}
+        >
+          <input
+            type="text"
+            placeholder="Usuario"
+            value={usuario}
+            onChange={(e) =>
+              setUsuario(e.target.value)
+            }
+          />
 
-        <button type="submit">Ingresar</button>
-      </form>
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) =>
+              setPassword(e.target.value)
+            }
+          />
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+          <button type="submit">
+            Ingresar
+          </button>
+        </form>
+
+        {error && (
+          <p className="error">
+            {error}
+          </p>
+        )}
+
+      </div>
     </div>
   );
 }

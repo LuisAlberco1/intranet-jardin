@@ -3,58 +3,66 @@ import { useEffect, useState } from "react";
 import type { Comunicado } from "../types/Comunicado";
 
 export default function DetalleComunicado() {
-  const { id } = useParams();
+  const { id } = useParams<{ id: string }>();
 
-  const [comunicado, setComunicado] =
-    useState<Comunicado | null>(null);
+  const [comunicado, setComunicado] = useState<Comunicado | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const data = localStorage.getItem("comunicados");
+    const cargar = () => {
+      try {
+        const data = localStorage.getItem("comunicados");
 
-    if (!data) return;
+        if (!data) {
+          setComunicado(null);
+          return;
+        }
 
-    const lista: Comunicado[] =
-      JSON.parse(data);
+        const lista: Comunicado[] = JSON.parse(data);
 
-    const encontrado =
-      lista.find((c) => c.id === id);
+        const encontrado = lista.find((c) => c.id === id);
 
-    if (encontrado) {
-      setComunicado(encontrado);
-    }
+        setComunicado(encontrado ?? null);
+      } catch (error) {
+        console.error("Error cargando comunicado:", error);
+        setComunicado(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    cargar();
   }, [id]);
+
+  if (loading) {
+    return <h2>Cargando...</h2>;
+  }
 
   if (!comunicado) {
     return <h2>Comunicado no encontrado</h2>;
   }
 
   return (
-    <div>
-      <h1>{comunicado.titulo}</h1>
+    <div className="container">
+      <div className="card">
+        <h1>{comunicado.titulo}</h1>
 
-      <p>{comunicado.descripcion}</p>
+        <p>{comunicado.descripcion}</p>
 
-      <p>
-        Categoría:
-        {" "}
-        {comunicado.categoria}
-      </p>
+        <p>
+          <b>Categoría:</b> {comunicado.categoria}
+        </p>
 
-      <p>
-        Fecha:
-        {" "}
-        {new Date(
-          comunicado.fecha
-        ).toLocaleDateString()}
-      </p>
+        <p>
+          <b>Fecha:</b>{" "}
+          {new Date(comunicado.fecha).toLocaleDateString()}
+        </p>
 
-      <p>
-        Destacado:
-        {" "}
-        {comunicado.destacado
-          ? "Sí"
-          : "No"}
-      </p>
+        <p>
+          <b>Destacado:</b>{" "}
+          {comunicado.destacado ? "Sí" : "No"}
+        </p>
+      </div>
     </div>
   );
 }

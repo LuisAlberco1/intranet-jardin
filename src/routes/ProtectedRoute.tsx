@@ -1,15 +1,24 @@
 import { Navigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import type { ReactNode } from "react";
 
-export default function ProtectedRoute({ children }: any) {
+type Props = {
+  children: ReactNode;
+};
+
+export default function ProtectedRoute({ children }: Props) {
   const ctx = useContext(AuthContext);
 
-  const user = ctx?.user;
-
-  if (!user) {
-    return <Navigate to="/" />;
+  if (!ctx) {
+    return null;
   }
 
-  return children;
+  const { user } = ctx;
+
+  if (!user) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
 }

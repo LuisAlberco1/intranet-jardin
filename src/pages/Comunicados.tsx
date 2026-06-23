@@ -1,9 +1,14 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
+import { DataContext } from "../context/DataContext";
 import type { Comunicado } from "../types/Comunicado";
 
 export default function Comunicados() {
-  const [lista, setLista] = useState<Comunicado[]>([]);
+  const ctx = useContext(DataContext);
+
+  if (!ctx) return null;
+
+  const { comunicados, setComunicados } = ctx;
 
   const [titulo, setTitulo] = useState("");
   const [descripcion, setDescripcion] = useState("");
@@ -11,28 +16,8 @@ export default function Comunicados() {
   const [destacado, setDestacado] = useState(false);
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
-
-  // búsqueda
   const [busqueda, setBusqueda] = useState("");
 
-  // cargar desde localStorage
-  useEffect(() => {
-    const data = localStorage.getItem("comunicados");
-
-    if (data) {
-      setLista(JSON.parse(data));
-    }
-  }, []);
-
-  // guardar en localStorage
-  useEffect(() => {
-    localStorage.setItem(
-      "comunicados",
-      JSON.stringify(lista)
-    );
-  }, [lista]);
-
-  // limpiar formulario
   const limpiarFormulario = () => {
     setTitulo("");
     setDescripcion("");
@@ -40,15 +25,8 @@ export default function Comunicados() {
     setDestacado(false);
   };
 
-  // agregar comunicado
   const agregar = () => {
-    if (
-      !titulo ||
-      !descripcion ||
-      !categoria
-    ) {
-      return;
-    }
+    if (!titulo || !descripcion || !categoria) return;
 
     const nuevo: Comunicado = {
       id: crypto.randomUUID(),
@@ -59,69 +37,44 @@ export default function Comunicados() {
       destacado,
     };
 
-    setLista([...lista, nuevo]);
-
+    setComunicados((prev) => [...prev, nuevo]);
     limpiarFormulario();
   };
 
-  // eliminar
   const eliminar = (id: string) => {
-    setLista(
-      lista.filter(
-        (item) => item.id !== id
-      )
-    );
+    setComunicados((prev) => prev.filter((c) => c.id !== id));
   };
 
-  // editar
-  const iniciarEdicion = (
-    c: Comunicado
-  ) => {
+  const iniciarEdicion = (c: Comunicado) => {
     setEditandoId(c.id);
-
     setTitulo(c.titulo);
     setDescripcion(c.descripcion);
     setCategoria(c.categoria);
     setDestacado(c.destacado);
   };
 
-  // guardar edición
   const guardarEdicion = () => {
     if (!editandoId) return;
 
-    setLista(
-      lista.map((item) =>
-        item.id === editandoId
-          ? {
-              ...item,
-              titulo,
-              descripcion,
-              categoria,
-              destacado,
-            }
-          : item
+    setComunicados((prev) =>
+      prev.map((c) =>
+        c.id === editandoId
+          ? { ...c, titulo, descripcion, categoria, destacado }
+          : c
       )
     );
 
     setEditandoId(null);
-
     limpiarFormulario();
   };
 
-  // filtrar búsqueda
-  const listaFiltrada = lista.filter(
-    (c) =>
-      c.titulo
-        .toLowerCase()
-        .includes(
-          busqueda.toLowerCase()
-        ) ||
-      c.categoria
-        .toLowerCase()
-        .includes(
-          busqueda.toLowerCase()
-        )
-  );
+  const listaFiltrada = comunicados.filter((c) => {
+    const q = busqueda.toLowerCase();
+    return (
+      c.titulo.toLowerCase().includes(q) ||
+      c.categoria.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div>
@@ -130,67 +83,42 @@ export default function Comunicados() {
       <input
         placeholder="Título"
         value={titulo}
-        onChange={(e) =>
-          setTitulo(e.target.value)
-        }
+        onChange={(e) => setTitulo(e.target.value)}
       />
 
       <input
         placeholder="Descripción"
         value={descripcion}
-        onChange={(e) =>
-          setDescripcion(
-            e.target.value
-          )
-        }
+        onChange={(e) => setDescripcion(e.target.value)}
       />
 
       <input
         placeholder="Categoría"
         value={categoria}
-        onChange={(e) =>
-          setCategoria(
-            e.target.value
-          )
-        }
+        onChange={(e) => setCategoria(e.target.value)}
       />
 
       <label>
         Destacado:
-
         <input
           type="checkbox"
           checked={destacado}
-          onChange={(e) =>
-            setDestacado(
-              e.target.checked
-            )
-          }
+          onChange={(e) => setDestacado(e.target.checked)}
         />
       </label>
 
       {editandoId ? (
-        <button
-          onClick={guardarEdicion}
-        >
-          Guardar cambios
-        </button>
+        <button onClick={guardarEdicion}>Guardar cambios</button>
       ) : (
-        <button onClick={agregar}>
-          Agregar
-        </button>
+        <button onClick={agregar}>Agregar</button>
       )}
 
       <hr />
 
       <input
-        placeholder="Buscar por título o categoría"
+        placeholder="Buscar"
         value={busqueda}
-        onChange={(e) =>
-          setBusqueda(
-            e.target.value
-          )
-        }
+        onChange={(e) => setBusqueda(e.target.value)}
       />
 
       <hr />
@@ -198,52 +126,17 @@ export default function Comunicados() {
       {listaFiltrada.map((c) => (
         <div key={c.id}>
           <h3>{c.titulo}</h3>
-
           <p>{c.descripcion}</p>
+          <p>Categoría: {c.categoria}</p>
+          <p>{new Date(c.fecha).toLocaleDateString()}</p>
+          <p>{c.destacado ? "Destacado" : "Normal"}</p>
 
-          <p>
-            Categoría: {c.categoria}
-          </p>
+          <button onClick={() => iniciarEdicion(c)}>Editar</button>
+          <button onClick={() => eliminar(c.id)}>Eliminar</button>
 
-          <p>
-            Fecha:{" "}
-            {new Date(
-              c.fecha
-            ).toLocaleDateString()}
-          </p>
-
-          <p>
-            Destacado:{" "}
-            {c.destacado
-              ? "Sí"
-              : "No"}
-          </p>
-
-          <button
-            onClick={() =>
-              iniciarEdicion(c)
-            }
-          >
-            Editar
-          </button>
-
-          <button
-            onClick={() =>
-              eliminar(c.id)
-            }
-          >
-            Eliminar
-          </button>
-
-          <Link
-            to={`/comunicado/${c.id}`}
-          >
-            <button>
-              Ver detalle
-            </button>
+          <Link to={`/comunicado/${c.id}`}>
+            <button>Ver detalle</button>
           </Link>
-
-          <hr />
         </div>
       ))}
     </div>

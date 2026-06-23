@@ -1,8 +1,13 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
+import { DataContext } from "../context/DataContext";
 import type { Actividad } from "../types/Actividad";
 
 export default function Actividades() {
-  const [lista, setLista] = useState<Actividad[]>([]);
+  const ctx = useContext(DataContext);
+
+  if (!ctx) return null;
+
+  const { actividades, setActividades } = ctx;
 
   const [nombre, setNombre] = useState("");
   const [fecha, setFecha] = useState("");
@@ -10,23 +15,7 @@ export default function Actividades() {
   const [responsable, setResponsable] = useState("");
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
-
   const [busqueda, setBusqueda] = useState("");
-
-  useEffect(() => {
-    const data = localStorage.getItem("actividades");
-
-    if (data) {
-      setLista(JSON.parse(data));
-    }
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem(
-      "actividades",
-      JSON.stringify(lista)
-    );
-  }, [lista]);
 
   const limpiar = () => {
     setNombre("");
@@ -36,14 +25,7 @@ export default function Actividades() {
   };
 
   const agregar = () => {
-    if (
-      !nombre ||
-      !fecha ||
-      !descripcion ||
-      !responsable
-    ) {
-      return;
-    }
+    if (!nombre || !fecha || !descripcion || !responsable) return;
 
     const nueva: Actividad = {
       id: crypto.randomUUID(),
@@ -53,24 +35,16 @@ export default function Actividades() {
       responsable,
     };
 
-    setLista([...lista, nueva]);
-
+    setActividades((prev) => [...prev, nueva]);
     limpiar();
   };
 
   const eliminar = (id: string) => {
-    setLista(
-      lista.filter(
-        (a) => a.id !== id
-      )
-    );
+    setActividades((prev) => prev.filter((a) => a.id !== id));
   };
 
-  const iniciarEdicion = (
-    a: Actividad
-  ) => {
+  const iniciarEdicion = (a: Actividad) => {
     setEditandoId(a.id);
-
     setNombre(a.nombre);
     setFecha(a.fecha);
     setDescripcion(a.descripcion);
@@ -80,38 +54,25 @@ export default function Actividades() {
   const guardar = () => {
     if (!editandoId) return;
 
-    setLista(
-      lista.map((a) =>
+    setActividades((prev) =>
+      prev.map((a) =>
         a.id === editandoId
-          ? {
-              ...a,
-              nombre,
-              fecha,
-              descripcion,
-              responsable,
-            }
+          ? { ...a, nombre, fecha, descripcion, responsable }
           : a
       )
     );
 
     setEditandoId(null);
-
     limpiar();
   };
 
-  const listaFiltrada = lista.filter(
-    (a) =>
-      a.nombre
-        .toLowerCase()
-        .includes(
-          busqueda.toLowerCase()
-        ) ||
-      a.responsable
-        .toLowerCase()
-        .includes(
-          busqueda.toLowerCase()
-        )
-  );
+  const listaFiltrada = actividades.filter((a) => {
+    const q = busqueda.toLowerCase();
+    return (
+      a.nombre.toLowerCase().includes(q) ||
+      a.responsable.toLowerCase().includes(q)
+    );
+  });
 
   return (
     <div>
@@ -120,47 +81,31 @@ export default function Actividades() {
       <input
         placeholder="Nombre actividad"
         value={nombre}
-        onChange={(e) =>
-          setNombre(e.target.value)
-        }
+        onChange={(e) => setNombre(e.target.value)}
       />
 
       <input
         type="date"
         value={fecha}
-        onChange={(e) =>
-          setFecha(e.target.value)
-        }
+        onChange={(e) => setFecha(e.target.value)}
       />
 
       <input
         placeholder="Descripción"
         value={descripcion}
-        onChange={(e) =>
-          setDescripcion(
-            e.target.value
-          )
-        }
+        onChange={(e) => setDescripcion(e.target.value)}
       />
 
       <input
         placeholder="Responsable"
         value={responsable}
-        onChange={(e) =>
-          setResponsable(
-            e.target.value
-          )
-        }
+        onChange={(e) => setResponsable(e.target.value)}
       />
 
       {editandoId ? (
-        <button onClick={guardar}>
-          Guardar cambios
-        </button>
+        <button onClick={guardar}>Guardar cambios</button>
       ) : (
-        <button onClick={agregar}>
-          Agregar
-        </button>
+        <button onClick={agregar}>Agregar</button>
       )}
 
       <hr />
@@ -168,11 +113,7 @@ export default function Actividades() {
       <input
         placeholder="Buscar actividad o responsable"
         value={busqueda}
-        onChange={(e) =>
-          setBusqueda(
-            e.target.value
-          )
-        }
+        onChange={(e) => setBusqueda(e.target.value)}
       />
 
       <hr />
@@ -180,30 +121,12 @@ export default function Actividades() {
       {listaFiltrada.map((a) => (
         <div key={a.id}>
           <h3>{a.nombre}</h3>
-
           <p>{a.descripcion}</p>
-
           <p>Fecha: {a.fecha}</p>
+          <p>Responsable: {a.responsable}</p>
 
-          <p>
-            Responsable: {a.responsable}
-          </p>
-
-          <button
-            onClick={() =>
-              iniciarEdicion(a)
-            }
-          >
-            Editar
-          </button>
-
-          <button
-            onClick={() =>
-              eliminar(a.id)
-            }
-          >
-            Eliminar
-          </button>
+          <button onClick={() => iniciarEdicion(a)}>Editar</button>
+          <button onClick={() => eliminar(a.id)}>Eliminar</button>
 
           <hr />
         </div>

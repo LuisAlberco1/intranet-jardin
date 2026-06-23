@@ -1,7 +1,19 @@
 import { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import type { CSSProperties } from "react";
+
+const getLength = (key: string) => {
+  try {
+    const data = localStorage.getItem(key);
+    if (!data) return 0;
+
+    const parsed = JSON.parse(data);
+
+    return Array.isArray(parsed) ? parsed.length : 0;
+  } catch {
+    return 0;
+  }
+};
 
 export default function Dashboard() {
   const ctx = useContext(AuthContext);
@@ -15,25 +27,24 @@ export default function Dashboard() {
 
   const { user, logout } = ctx;
 
+  const actualizar = () => {
+    setTotalComunicados(getLength("comunicados"));
+    setTotalReuniones(getLength("reuniones"));
+    setTotalActividades(getLength("actividades"));
+  };
+
+  // carga inicial
   useEffect(() => {
-    const comunicados =
-      JSON.parse(
-        localStorage.getItem("comunicados") || "[]"
-      );
+    actualizar();
+  }, []);
 
-    const reuniones =
-      JSON.parse(
-        localStorage.getItem("reuniones") || "[]"
-      );
+  // 🔥 sincronización cada vez que vuelves a la pestaña
+  useEffect(() => {
+    window.addEventListener("focus", actualizar);
 
-    const actividades =
-      JSON.parse(
-        localStorage.getItem("actividades") || "[]"
-      );
-
-    setTotalComunicados(comunicados.length);
-    setTotalReuniones(reuniones.length);
-    setTotalActividades(actividades.length);
+    return () => {
+      window.removeEventListener("focus", actualizar);
+    };
   }, []);
 
   const handleLogout = () => {
@@ -42,7 +53,7 @@ export default function Dashboard() {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className="container">
       <h1>🏫 Intranet Jardín Infantil</h1>
 
       <p>
@@ -53,56 +64,43 @@ export default function Dashboard() {
 
       <h2>Resumen del sistema</h2>
 
-      <div
-        style={{
-          display: "flex",
-          gap: "15px",
-          marginBottom: "30px",
-        }}
-      >
-        <div style={cardStyle}>
+      <div className="grid grid-3">
+        <div className="card">
           <h3>{totalComunicados}</h3>
           <p>Comunicados</p>
         </div>
 
-        <div style={cardStyle}>
+        <div className="card">
           <h3>{totalReuniones}</h3>
           <p>Reuniones</p>
         </div>
 
-        <div style={cardStyle}>
+        <div className="card">
           <h3>{totalActividades}</h3>
           <p>Actividades</p>
         </div>
       </div>
 
+      <hr />
+
       <h2>Módulos</h2>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3,1fr)",
-          gap: "15px",
-        }}
-      >
+      <div className="grid grid-3">
         <Link to="/comunicados">
-          <div style={cardStyle}>
-            📢
-            <h3>Comunicados</h3>
+          <div className="card">
+            <h3>📢 Comunicados</h3>
           </div>
         </Link>
 
         <Link to="/reuniones">
-          <div style={cardStyle}>
-            👨‍👩‍👧
-            <h3>Reuniones</h3>
+          <div className="card">
+            <h3>👨‍👩‍👧 Reuniones</h3>
           </div>
         </Link>
 
         <Link to="/actividades">
-          <div style={cardStyle}>
-            📅
-            <h3>Actividades</h3>
+          <div className="card">
+            <h3>📅 Actividades</h3>
           </div>
         </Link>
       </div>
@@ -115,10 +113,3 @@ export default function Dashboard() {
     </div>
   );
 }
-
-const cardStyle: CSSProperties = {
-  padding: "20px",
-  border: "1px solid #ccc",
-  borderRadius: "10px",
-  textAlign: "center",
-};
