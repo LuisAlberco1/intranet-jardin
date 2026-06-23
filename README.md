@@ -1,73 +1,85 @@
-# React + TypeScript + Vite
+# Intranet Jardín Infantil
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Descripción del proyecto
+Este proyecto corresponde al desarrollo de una aplicación web tipo intranet para un Jardín Infantil, creada con React, TypeScript y Vite.
+El sistema permite administrar información interna mediante distintos módulos, incluyendo autenticación de usuarios, gestión de comunicados, reuniones y actividades.
+La aplicación utiliza rutas protegidas, contexto global y almacenamiento local mediante localStorage para mantener la información persistente.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Tecnologías utilizadas
+* React
+* TypeScript
+* Vite
+* React Router DOM
+* Context API
+* CSS
+* localStorage
 
-## React Compiler
+## Funcionalidades implementadas:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Sistema de autenticación
+* Login con validación de credenciales
+* Mensajes de error
+* Contexto global mediante AuthContext
+* Cierre de sesión
+* Persistencia de sesión
+* Rutas protegidas
 
-## Expanding the ESLint configuration
+### Dashboard principal
+* Visualización de información general
+* Resumen de comunicados
+* Resumen de reuniones
+* Resumen de actividades
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Módulo de comunicados
+Permite:
+* Crear comunicados
+* Visualizar comunicados
+* Editar comunicados
+* Eliminar comunicados
+* Buscar comunicados
+* Ver detalle mediante ruta dinámica
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+### Módulo de reuniones
+Permite:
+* Crear reuniones
+* Visualizar reuniones
+* Editar reuniones
+* Eliminar reuniones
+* Buscar reuniones
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Módulo de actividades
+Permite:
+* Crear actividades
+* Visualizar actividades
+* Editar actividades
+* Eliminar actividades
+* Buscar actividades
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Estructura del proyecto
+src/
+├── components/
+├── context/
+├── pages/
+├── routes/
+├── styles/
+├── types/
+├── App.tsx
+├── main.tsx
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Cómo ejecutar el proyecto:
+### Entrar a la carpeta
+cd intranet-jardin
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Instalar dependencias
+npm install
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+### Ejecutar proyecto
+npm run dev
+
+## Usuario de prueba
+Usuario:
+admin
+
+Contraseña:
+1234

@@ -1,13 +1,21 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 
 export default function Navbar() {
   const ctx = useContext(AuthContext);
+  const navigate = useNavigate();
 
-  if (!ctx) return null;
+  if (!ctx) {
+    return null;
+  }
 
   const { user, logout } = ctx;
+
+  const handleLogout = () => {
+    logout();
+    navigate("/");
+  };
 
   return (
     <div className="navbar">
@@ -16,16 +24,31 @@ export default function Navbar() {
       </div>
 
       <div className="nav-links">
-        <Link to="/dashboard">Inicio</Link>
-        <Link to="/comunicados">Comunicados</Link>
-        <Link to="/reuniones">Reuniones</Link>
-        <Link to="/actividades">Actividades</Link>
+        <Link to="/dashboard">
+          Inicio
+        </Link>
+
+        <Link to="/comunicados">
+          Comunicados
+        </Link>
+
+        <Link to="/reuniones">
+          Reuniones
+        </Link>
+
+        <Link to="/actividades">
+          Actividades
+        </Link>
       </div>
 
       <div className="nav-user">
-        <span>{user?.nombre}</span>
+        <span>
+          {user?.nombre}
+          {" - "}
+          {user?.rol}
+        </span>
 
-        <button onClick={logout}>
+        <button onClick={handleLogout}>
           Salir
         </button>
       </div>

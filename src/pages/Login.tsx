@@ -2,46 +2,65 @@ import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
+type Credencial = {
+  user: string;
+  pass: string;
+  nombre: string;
+  rol: string;
+};
+
 export default function Login() {
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
-
-  const login = ctx?.login;
 
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const credenciales = {
-    user: "admin",
-    pass: "1234",
-    nombre: "Administrador",
-    rol: "admin",
-  };
+  // seguridad TS
+  if (!ctx) {
+    return <h2>Error cargando autenticación</h2>;
+  }
 
-  const handleLogin = (e: React.FormEvent) => {
+  const { login } = ctx;
+
+  // simulación de usuarios
+  const credenciales: Credencial[] = [
+    {
+      user: "admin",
+      pass: "1234",
+      nombre: "Administrador",
+      rol: "Admin",
+    },
+  ];
+
+  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setError("");
 
-    if (!usuario || !password) {
+    if (!usuario.trim() || !password.trim()) {
       setError("Completa todos los campos");
       return;
     }
 
-    if (
-      usuario === credenciales.user &&
-      password === credenciales.pass
-    ) {
-      login?.({
-        nombre: credenciales.nombre,
-        rol: credenciales.rol,
-      });
+    const usuarioEncontrado = credenciales.find(
+      (u) =>
+        u.user === usuario &&
+        u.pass === password
+    );
 
-      navigate("/dashboard");
-    } else {
+    if (!usuarioEncontrado) {
       setError("Credenciales incorrectas");
+      return;
     }
+
+    login({
+      nombre: usuarioEncontrado.nombre,
+      rol: usuarioEncontrado.rol,
+    });
+
+    navigate("/dashboard");
   };
 
   return (
@@ -82,6 +101,14 @@ export default function Login() {
             {error}
           </p>
         )}
+
+        <hr />
+
+        <small>
+          Usuario: admin
+          <br />
+          Contraseña: 1234
+        </small>
 
       </div>
     </div>
