@@ -1,51 +1,30 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-
-const getLength = (key: string) => {
-  try {
-    const data = localStorage.getItem(key);
-    if (!data) return 0;
-
-    const parsed = JSON.parse(data);
-
-    return Array.isArray(parsed) ? parsed.length : 0;
-  } catch {
-    return 0;
-  }
-};
+import { DataContext } from "../context/DataContext";
 
 export default function Dashboard() {
-  const ctx = useContext(AuthContext);
+  const authCtx = useContext(AuthContext);
+  const dataCtx = useContext(DataContext);
+
   const navigate = useNavigate();
 
-  const [totalComunicados, setTotalComunicados] = useState(0);
-  const [totalReuniones, setTotalReuniones] = useState(0);
-  const [totalActividades, setTotalActividades] = useState(0);
+  if (!authCtx || !dataCtx) {
+    return null;
+  }
 
-  if (!ctx) return null;
+  const { user, logout } = authCtx;
 
-  const { user, logout } = ctx;
+  // seguridad TS
+  if (!user) {
+    return null;
+  }
 
-  const actualizar = () => {
-    setTotalComunicados(getLength("comunicados"));
-    setTotalReuniones(getLength("reuniones"));
-    setTotalActividades(getLength("actividades"));
-  };
-
-  // carga inicial
-  useEffect(() => {
-    actualizar();
-  }, []);
-
-  // 🔥 sincronización cada vez que vuelves a la pestaña
-  useEffect(() => {
-    window.addEventListener("focus", actualizar);
-
-    return () => {
-      window.removeEventListener("focus", actualizar);
-    };
-  }, []);
+  const {
+    comunicados,
+    reuniones,
+    actividades,
+  } = dataCtx;
 
   const handleLogout = () => {
     logout();
@@ -57,7 +36,9 @@ export default function Dashboard() {
       <h1>🏫 Intranet Jardín Infantil</h1>
 
       <p>
-        Usuario: <b>{user?.nombre}</b> | Rol: {user?.rol}
+        Usuario: <b>{user.nombre}</b>
+        {" | "}
+        Rol: <b>{user.rol}</b>
       </p>
 
       <hr />
@@ -65,20 +46,22 @@ export default function Dashboard() {
       <h2>Resumen del sistema</h2>
 
       <div className="grid grid-3">
+
         <div className="card">
-          <h3>{totalComunicados}</h3>
-          <p>Comunicados</p>
+          <h3>{comunicados.length}</h3>
+          <p>📢 Comunicados</p>
         </div>
 
         <div className="card">
-          <h3>{totalReuniones}</h3>
-          <p>Reuniones</p>
+          <h3>{reuniones.length}</h3>
+          <p>👨‍👩‍👧 Reuniones</p>
         </div>
 
         <div className="card">
-          <h3>{totalActividades}</h3>
-          <p>Actividades</p>
+          <h3>{actividades.length}</h3>
+          <p>📅 Actividades</p>
         </div>
+
       </div>
 
       <hr />
@@ -86,23 +69,28 @@ export default function Dashboard() {
       <h2>Módulos</h2>
 
       <div className="grid grid-3">
+
         <Link to="/comunicados">
           <div className="card">
             <h3>📢 Comunicados</h3>
+            <p>Administrar comunicados internos</p>
           </div>
         </Link>
 
         <Link to="/reuniones">
           <div className="card">
             <h3>👨‍👩‍👧 Reuniones</h3>
+            <p>Gestionar reuniones</p>
           </div>
         </Link>
 
         <Link to="/actividades">
           <div className="card">
             <h3>📅 Actividades</h3>
+            <p>Gestionar actividades</p>
           </div>
         </Link>
+
       </div>
 
       <hr />

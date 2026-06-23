@@ -1,6 +1,7 @@
 import { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
+import "../styles/login.css";
 
 type Credencial = {
   user: string;
@@ -17,14 +18,12 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // seguridad TS
   if (!ctx) {
     return <h2>Error cargando autenticación</h2>;
   }
 
   const { login } = ctx;
 
-  // simulación de usuarios
   const credenciales: Credencial[] = [
     {
       user: "admin",
@@ -36,7 +35,6 @@ export default function Login() {
 
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     setError("");
 
     if (!usuario.trim() || !password.trim()) {
@@ -45,9 +43,7 @@ export default function Login() {
     }
 
     const usuarioEncontrado = credenciales.find(
-      (u) =>
-        u.user === usuario &&
-        u.pass === password
+      (u) => u.user === usuario && u.pass === password
     );
 
     if (!usuarioEncontrado) {
@@ -64,52 +60,57 @@ export default function Login() {
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="login-page">
+      <div className="login-header">
+        <div className="header-content">
+          <div className="school-icon">🏫</div>
+          <h1>INTRANET</h1>
+          <p>JARDÍN INFANTIL</p>
+        </div>
+      </div>
 
-        <h2>🏫 Login Intranet</h2>
+      <div className="login-main">
+        <div className="login-card">
+          <div className="card-icon">🏠</div>
 
-        <form
-          className="login-form"
-          onSubmit={handleLogin}
-        >
-          <input
-            type="text"
-            placeholder="Usuario"
-            value={usuario}
-            onChange={(e) =>
-              setUsuario(e.target.value)
-            }
-          />
+          <h2>Bienvenido 👋</h2>
+          <p className="subtitle">Ingresa tus credenciales para continuar</p>
 
-          <input
-            type="password"
-            placeholder="Contraseña"
-            value={password}
-            onChange={(e) =>
-              setPassword(e.target.value)
-            }
-          />
+          <form className="login-form" onSubmit={handleLogin}>
+            <div className="input-group">
+              <span className="input-icon">👤</span>
+              <input
+                type="text"
+                placeholder="Usuario"
+                value={usuario}
+                onChange={(e) => setUsuario(e.target.value)}
+              />
+            </div>
 
-          <button type="submit">
-            Ingresar
-          </button>
-        </form>
+            <div className="input-group">
+              <span className="input-icon">🔒</span>
+              <input
+                type="password"
+                placeholder="Contraseña"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
 
-        {error && (
-          <p className="error">
-            {error}
-          </p>
-        )}
+            <button type="submit" className="btn-login">
+              ➤ Ingresar
+            </button>
+          </form>
 
-        <hr />
+          {error && <p className="error-message">{error}</p>}
+        </div>
+      </div>
 
-        <small>
-          Usuario: admin
-          <br />
-          Contraseña: 1234
-        </small>
-
+      <div className="login-footer">
+        <div className="footer-content">
+          <p>Juntos formamos el futuro de nuestros niños</p>
+          <p>© 2026 Jardín Infantil - Intranet</p>
+        </div>
       </div>
     </div>
   );
