@@ -11,18 +11,23 @@ export default function Reuniones() {
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
 
-  // cargar desde localStorage
+  const [busqueda, setBusqueda] = useState("");
+
   useEffect(() => {
     const data = localStorage.getItem("reuniones");
-    if (data) setLista(JSON.parse(data));
+
+    if (data) {
+      setLista(JSON.parse(data));
+    }
   }, []);
 
-  // guardar en localStorage
   useEffect(() => {
-    localStorage.setItem("reuniones", JSON.stringify(lista));
+    localStorage.setItem(
+      "reuniones",
+      JSON.stringify(lista)
+    );
   }, [lista]);
 
-  // limpiar formulario
   const limpiar = () => {
     setTitulo("");
     setFecha("");
@@ -30,9 +35,15 @@ export default function Reuniones() {
     setDescripcion("");
   };
 
-  // agregar
   const agregar = () => {
-    if (!titulo || !fecha || !hora || !descripcion) return;
+    if (
+      !titulo ||
+      !fecha ||
+      !hora ||
+      !descripcion
+    ) {
+      return;
+    }
 
     const nueva: Reunion = {
       id: crypto.randomUUID(),
@@ -43,38 +54,59 @@ export default function Reuniones() {
     };
 
     setLista([...lista, nueva]);
+
     limpiar();
   };
 
-  // eliminar
   const eliminar = (id: string) => {
-    setLista(lista.filter((r) => r.id !== id));
+    setLista(
+      lista.filter(
+        (r) => r.id !== id
+      )
+    );
   };
 
-  // iniciar edición
-  const iniciarEdicion = (r: Reunion) => {
+  const iniciarEdicion = (
+    r: Reunion
+  ) => {
     setEditandoId(r.id);
+
     setTitulo(r.titulo);
     setFecha(r.fecha);
     setHora(r.hora);
     setDescripcion(r.descripcion);
   };
 
-  // guardar edición
   const guardar = () => {
     if (!editandoId) return;
 
     setLista(
       lista.map((r) =>
         r.id === editandoId
-          ? { ...r, titulo, fecha, hora, descripcion }
+          ? {
+              ...r,
+              titulo,
+              fecha,
+              hora,
+              descripcion,
+            }
           : r
       )
     );
 
     setEditandoId(null);
+
     limpiar();
   };
+
+  const listaFiltrada = lista.filter(
+    (r) =>
+      r.titulo
+        .toLowerCase()
+        .includes(
+          busqueda.toLowerCase()
+        )
+  );
 
   return (
     <div>
@@ -83,43 +115,88 @@ export default function Reuniones() {
       <input
         placeholder="Título"
         value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
+        onChange={(e) =>
+          setTitulo(e.target.value)
+        }
       />
 
       <input
         type="date"
         value={fecha}
-        onChange={(e) => setFecha(e.target.value)}
+        onChange={(e) =>
+          setFecha(e.target.value)
+        }
       />
 
       <input
         type="time"
         value={hora}
-        onChange={(e) => setHora(e.target.value)}
+        onChange={(e) =>
+          setHora(e.target.value)
+        }
       />
 
       <input
         placeholder="Descripción"
         value={descripcion}
-        onChange={(e) => setDescripcion(e.target.value)}
+        onChange={(e) =>
+          setDescripcion(
+            e.target.value
+          )
+        }
       />
 
       {editandoId ? (
-        <button onClick={guardar}>Guardar cambios</button>
+        <button onClick={guardar}>
+          Guardar cambios
+        </button>
       ) : (
-        <button onClick={agregar}>Agregar</button>
+        <button onClick={agregar}>
+          Agregar
+        </button>
       )}
 
       <hr />
 
-      {lista.map((r) => (
+      <input
+        placeholder="Buscar reunión"
+        value={busqueda}
+        onChange={(e) =>
+          setBusqueda(
+            e.target.value
+          )
+        }
+      />
+
+      <hr />
+
+      {listaFiltrada.map((r) => (
         <div key={r.id}>
           <h3>{r.titulo}</h3>
-          <p>{r.descripcion}</p>
-          <p>{r.fecha} - {r.hora}</p>
 
-          <button onClick={() => iniciarEdicion(r)}>Editar</button>
-          <button onClick={() => eliminar(r.id)}>Eliminar</button>
+          <p>{r.descripcion}</p>
+
+          <p>
+            {r.fecha} - {r.hora}
+          </p>
+
+          <button
+            onClick={() =>
+              iniciarEdicion(r)
+            }
+          >
+            Editar
+          </button>
+
+          <button
+            onClick={() =>
+              eliminar(r.id)
+            }
+          >
+            Eliminar
+          </button>
+
+          <hr />
         </div>
       ))}
     </div>

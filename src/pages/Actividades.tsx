@@ -11,6 +11,8 @@ export default function Actividades() {
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
 
+  const [busqueda, setBusqueda] = useState("");
+
   useEffect(() => {
     const data = localStorage.getItem("actividades");
 
@@ -58,12 +60,17 @@ export default function Actividades() {
 
   const eliminar = (id: string) => {
     setLista(
-      lista.filter((a) => a.id !== id)
+      lista.filter(
+        (a) => a.id !== id
+      )
     );
   };
 
-  const iniciarEdicion = (a: Actividad) => {
+  const iniciarEdicion = (
+    a: Actividad
+  ) => {
     setEditandoId(a.id);
+
     setNombre(a.nombre);
     setFecha(a.fecha);
     setDescripcion(a.descripcion);
@@ -92,6 +99,20 @@ export default function Actividades() {
     limpiar();
   };
 
+  const listaFiltrada = lista.filter(
+    (a) =>
+      a.nombre
+        .toLowerCase()
+        .includes(
+          busqueda.toLowerCase()
+        ) ||
+      a.responsable
+        .toLowerCase()
+        .includes(
+          busqueda.toLowerCase()
+        )
+  );
+
   return (
     <div>
       <h1>Calendario de Actividades</h1>
@@ -116,7 +137,9 @@ export default function Actividades() {
         placeholder="Descripción"
         value={descripcion}
         onChange={(e) =>
-          setDescripcion(e.target.value)
+          setDescripcion(
+            e.target.value
+          )
         }
       />
 
@@ -124,7 +147,9 @@ export default function Actividades() {
         placeholder="Responsable"
         value={responsable}
         onChange={(e) =>
-          setResponsable(e.target.value)
+          setResponsable(
+            e.target.value
+          )
         }
       />
 
@@ -140,7 +165,19 @@ export default function Actividades() {
 
       <hr />
 
-      {lista.map((a) => (
+      <input
+        placeholder="Buscar actividad o responsable"
+        value={busqueda}
+        onChange={(e) =>
+          setBusqueda(
+            e.target.value
+          )
+        }
+      />
+
+      <hr />
+
+      {listaFiltrada.map((a) => (
         <div key={a.id}>
           <h3>{a.nombre}</h3>
 
@@ -167,6 +204,8 @@ export default function Actividades() {
           >
             Eliminar
           </button>
+
+          <hr />
         </div>
       ))}
     </div>

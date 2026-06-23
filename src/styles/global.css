@@ -1,0 +1,52 @@
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f6f9;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+.container {
+  padding: 20px;
+}
+
+.card {
+  background: white;
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+}
+
+.grid {
+  display: grid;
+  gap: 15px;
+}
+
+.grid-3 {
+  grid-template-columns: repeat(3,1fr);
+}
+
+input {
+  padding: 10px;
+  margin: 5px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  padding: 10px 14px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: .9;
+}
+
+hr {
+  margin: 20px 0;
+}

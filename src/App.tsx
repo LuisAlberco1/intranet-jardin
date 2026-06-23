@@ -6,72 +6,78 @@ import Reuniones from "./pages/Reuniones";
 import Actividades from "./pages/Actividades";
 import DetalleComunicado from "./pages/DetalleComunicado";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import Navbar from "./components/Navbar";
 
 function App() {
   const session = localStorage.getItem("session");
 
   return (
-    <Routes>
-      {/* Login */}
-      <Route
-        path="/"
-        element={
-          session
-            ? <Navigate to="/dashboard" />
-            : <Login />
-        }
-      />
+    <>
+      {/* Navbar global solo si hay sesión */}
+      {session && <Navbar />}
 
-      {/* Dashboard */}
-      <Route
-        path="/dashboard"
-        element={
-          <ProtectedRoute>
-            <Dashboard />
-          </ProtectedRoute>
-        }
-      />
+      <Routes>
+        {/* Login */}
+        <Route
+          path="/"
+          element={
+            session
+              ? <Navigate to="/dashboard" />
+              : <Login />
+          }
+        />
 
-      {/* Comunicados */}
-      <Route
-        path="/comunicados"
-        element={
-          <ProtectedRoute>
-            <Comunicados />
-          </ProtectedRoute>
-        }
-      />
+        {/* Dashboard */}
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Detalle comunicado (useParams) */}
-      <Route
-        path="/comunicado/:id"
-        element={
-          <ProtectedRoute>
-            <DetalleComunicado />
-          </ProtectedRoute>
-        }
-      />
+        {/* Comunicados */}
+        <Route
+          path="/comunicados"
+          element={
+            <ProtectedRoute>
+              <Comunicados />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Reuniones */}
-      <Route
-        path="/reuniones"
-        element={
-          <ProtectedRoute>
-            <Reuniones />
-          </ProtectedRoute>
-        }
-      />
+        {/* Detalle comunicado */}
+        <Route
+          path="/comunicado/:id"
+          element={
+            <ProtectedRoute>
+              <DetalleComunicado />
+            </ProtectedRoute>
+          }
+        />
 
-      {/* Actividades */}
-      <Route
-        path="/actividades"
-        element={
-          <ProtectedRoute>
-            <Actividades />
-          </ProtectedRoute>
-        }
-      />
-    </Routes>
+        {/* Reuniones */}
+        <Route
+          path="/reuniones"
+          element={
+            <ProtectedRoute>
+              <Reuniones />
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Actividades */}
+        <Route
+          path="/actividades"
+          element={
+            <ProtectedRoute>
+              <Actividades />
+            </ProtectedRoute>
+          }
+        />
+      </Routes>
+    </>
   );
 }
 
