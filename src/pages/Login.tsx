@@ -11,19 +11,23 @@ type Credencial = {
 };
 
 export default function Login() {
+  // Acceso al contexto de autenticación para ejecutar el login.
   const ctx = useContext(AuthContext);
   const navigate = useNavigate();
 
+  // Estado local para los campos del formulario y posibles errores.
   const [usuario, setUsuario] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  // Muestra mensaje si el contexto de autenticación no está disponible.
   if (!ctx) {
     return <h2>Error cargando autenticación</h2>;
   }
 
   const { login } = ctx;
 
+  // Credenciales de prueba utilizadas para autenticación local.
   const credenciales: Credencial[] = [
     {
       user: "admin",
@@ -33,6 +37,7 @@ export default function Login() {
     },
   ];
 
+  // Maneja el envío del formulario de inicio de sesión.
   const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -55,6 +60,7 @@ export default function Login() {
       user: usuarioEncontrado.user,
     });
 
+    // Redirige al dashboard luego de autenticarse.
     navigate("/dashboard");
   };
 
@@ -75,7 +81,9 @@ export default function Login() {
           <h2>Bienvenido 👋</h2>
           <p className="subtitle">Ingresa tus credenciales para continuar</p>
 
+          {/* Formulario de autenticación local con validación básica. */}
           <form className="login-form" onSubmit={handleLogin}>
+            {/* Campo de usuario con control de estado */}
             <div className="input-group">
               <span className="input-icon">👤</span>
               <input
@@ -86,6 +94,7 @@ export default function Login() {
               />
             </div>
 
+            {/* Campo de contraseña con control de estado */}
             <div className="input-group">
               <span className="input-icon">🔒</span>
               <input
@@ -96,6 +105,7 @@ export default function Login() {
               />
             </div>
 
+            {/* Botón de envío para autenticar el usuario */}
             <button type="submit" className="btn-login">
               ➤ Ingresar
             </button>

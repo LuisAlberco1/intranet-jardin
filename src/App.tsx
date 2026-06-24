@@ -15,6 +15,8 @@ import "./styles/navbar.css";
 import "./styles/dashboard.css";
 import "./styles/pages.css";
 
+// Componente principal que define la estructura de rutas y controla
+// si el usuario debe ir al login o al dashboard.
 function App() {
   const ctx = useContext(AuthContext);
 
@@ -22,11 +24,11 @@ function App() {
 
   return (
     <>
-      {/* Navbar global */}
+      {/* Navbar global que solo se muestra cuando hay usuario autenticado. */}
       {user && <Navbar />}
 
       <Routes>
-        {/* Login */}
+        {/* Login: página pública para iniciar sesión. */}
         <Route
           path="/"
           element={
@@ -34,7 +36,7 @@ function App() {
           }
         />
 
-        {/* Dashboard */}
+        {/* Dashboard: vista principal del usuario autenticado. */}
         <Route
           path="/dashboard"
           element={
@@ -44,7 +46,7 @@ function App() {
           }
         />
 
-        {/* Comunicados */}
+        {/* Comunicados: módulo para crear, editar y buscar comunicados. */}
         <Route
           path="/comunicados"
           element={
@@ -54,7 +56,7 @@ function App() {
           }
         />
 
-        {/* Detalle */}
+        {/* Detalle del comunicado seleccionado. */}
         <Route
           path="/comunicado/:id"
           element={
@@ -64,7 +66,7 @@ function App() {
           }
         />
 
-        {/* Reuniones */}
+        {/* Reuniones: módulo para administrar reuniones y validar fechas futuras. */}
         <Route
           path="/reuniones"
           element={
@@ -74,7 +76,7 @@ function App() {
           }
         />
 
-        {/* Actividades */}
+        {/* Actividades: módulo para planificar actividades del jardín. */}
         <Route
           path="/actividades"
           element={
@@ -84,7 +86,8 @@ function App() {
           }
         />
 
-        {/* fallback */}
+        {/* Ruta fallback que redirige al login cuando la URL no coincide. */}
+        <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>

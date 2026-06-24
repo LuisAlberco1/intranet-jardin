@@ -5,6 +5,11 @@ import type { Actividad } from "../types/Actividad";
 import type { Comunicado } from "../types/Comunicado";
 import type { Reunion } from "../types/Reunion";
 
+// Contexto de datos que mantiene actividades, reuniones y comunicados.
+// Contexto de datos que comparte las listas de actividades, reuniones y comunicados.
+// Incluye setters para mantener los datos sincronizados con localStorage.
+// Contexto de datos que comparte actividades, reuniones y comunicados.
+// Los setters permiten editar estas listas desde cualquier página.
 type DataContextType = {
   actividades: Actividad[];
   reuniones: Reunion[];
@@ -22,7 +27,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
   const [reuniones, setReuniones] = useState<Reunion[]>([]);
   const [comunicados, setComunicados] = useState<Comunicado[]>([]);
 
-  // 🔥 carga inicial
+  // Carga inicial de datos desde localStorage cuando el provider monta.
   useEffect(() => {
     try {
       setActividades(JSON.parse(localStorage.getItem("actividades") || "[]"));
@@ -35,7 +40,7 @@ export function DataProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // 🔥 persistencia automática
+  // Actualiza localStorage cada vez que cambian las listas en memoria.
   useEffect(() => {
     localStorage.setItem("actividades", JSON.stringify(actividades));
   }, [actividades]);

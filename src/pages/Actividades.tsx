@@ -19,6 +19,10 @@ export default function Actividades() {
   const [busqueda, setBusqueda] = useState("");
   const hoy = new Date().toISOString().split("T")[0];
 
+  // Fecha mínima para evitar actividades en el pasado.
+
+  // Fecha mínima para evitar actividades con fecha pasada.
+
   const limpiar = () => {
     setNombre("");
     setFecha("");
@@ -27,6 +31,8 @@ export default function Actividades() {
     setError("");
   };
 
+  // Agrega una nueva actividad validando fecha futura y campos.
+  // Agrega una nueva actividad validando los campos y la fecha.
   const agregar = () => {
     if (!nombre || !fecha || !descripcion || !responsable) {
       setError("Por favor completa todos los campos.");
@@ -63,6 +69,8 @@ export default function Actividades() {
     setResponsable(a.responsable);
   };
 
+  // Guarda los cambios de una actividad existente.
+  // Guarda los cambios de una actividad editada.
   const guardar = () => {
     if (!editandoId) return;
 
@@ -89,6 +97,7 @@ export default function Actividades() {
     limpiar();
   };
 
+  // Filtra las actividades por nombre o responsable.
   const listaFiltrada = actividades.filter((a) => {
     const q = busqueda.toLowerCase();
     return (

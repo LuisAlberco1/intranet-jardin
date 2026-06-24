@@ -11,6 +11,7 @@ export default function DetalleComunicado() {
 
   const dataCtx = useContext(DataContext);
 
+  // Carga el comunicado por id desde el contexto o localStorage.
   useEffect(() => {
     const cargar = () => {
       try {

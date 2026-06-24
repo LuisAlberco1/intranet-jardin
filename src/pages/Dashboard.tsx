@@ -23,11 +23,14 @@ export default function Dashboard() {
     actividades,
   } = dataCtx;
 
+  // Parámetros para controlar el rango de días en los que se muestran próximos eventos.
   const [diasReuniones, setDiasReuniones] = useState<number>(7);
   const [diasActividades, setDiasActividades] = useState<number>(14);
 
+  // Fecha base utilizada para calcular eventos próximos.
   const ahora = useMemo(() => new Date(), []);
 
+  // Filtra las reuniones que ocurren dentro del rango seleccionado.
   const proximasReuniones = reuniones.filter((r) => {
     try {
       const fechaStr = r.fecha ?? "";
@@ -52,13 +55,14 @@ export default function Dashboard() {
 
   return (
     <div className="dashboard-page">
+      {/* Cabecera de bienvenida con el usuario autenticado */}
       <div className="dashboard-header">
         <h1>🏫 Bienvenido a la Intranet</h1>
         <p>Usuario: <strong>{user.user}</strong></p>
       </div>
 
       <div className="dashboard-container">
-        {/* SUMMARY SECTION */}
+        {/* Resumen de las cantidades totales de comunicaciones, reuniones y actividades */}
         <div className="summary-section">
           <h2>📊 Resumen del Sistema</h2>
           <div className="cards-grid">
@@ -79,7 +83,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* MODULES SECTION */}
+        {/* Accesos rápidos a los módulos de gestión del intranet */}
         <div className="summary-section">
           <h2>🎯 Módulos de Gestión</h2>
           <div className="modules-grid">
@@ -121,7 +125,7 @@ export default function Dashboard() {
           </div>
         </div>
 
-        {/* UPCOMING SECTION */}
+        {}
         <div className="summary-section upcoming-cards" style={{ marginTop: 20 }}>
           <h2>⏰ Próximas Reuniones y Actividades</h2>
           <div className="cards-row">

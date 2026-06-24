@@ -19,6 +19,10 @@ export default function Reuniones() {
   const [busqueda, setBusqueda] = useState("");
   const hoy = new Date().toISOString().split("T")[0];
 
+  // Fecha mínima para evitar reuniones con fecha pasada.
+
+  // Fecha mínima usada en los inputs para evitar reuniones en el pasado.
+
   const limpiar = () => {
     setTitulo("");
     setFecha("");
@@ -27,12 +31,16 @@ export default function Reuniones() {
     setError("");
   };
 
+  // Valida que la reunión sea futura y tenga fecha y hora.
+  // Valida que la reunión tenga fecha y hora en el futuro.
   const fechaHoraValida = (fecha: string, hora: string) => {
     if (!fecha || !hora) return false;
     const fechaHora = new Date(`${fecha}T${hora}`);
     return fechaHora >= new Date();
   };
 
+  // Agrega una nueva reunión validando los campos y la fecha.
+  // Crea una nueva reunión y valida el formulario.
   const agregar = () => {
     if (!titulo || !fecha || !hora || !descripcion) {
       setError("Por favor completa todos los campos.");
@@ -68,6 +76,8 @@ export default function Reuniones() {
     setDescripcion(r.descripcion);
   };
 
+  // Guarda los cambios de una reunión que se está editando.
+  // Guarda los cambios para una reunión que está en modo edición.
   const guardar = () => {
     if (!editandoId) return;
 
@@ -99,6 +109,7 @@ export default function Reuniones() {
     limpiar();
   };
 
+  // Aplica filtro de búsqueda a las reuniones por título.
   const listaFiltrada = reuniones.filter((r) => {
     const q = busqueda.toLowerCase();
     return r.titulo.toLowerCase().includes(q);

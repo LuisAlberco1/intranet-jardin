@@ -7,12 +7,12 @@ type Props = {
   children: ReactNode;
 };
 
+// Ruta protegida que redirige al login si no hay usuario autenticado.
 export default function ProtectedRoute({
   children,
 }: Props) {
   const ctx = useContext(AuthContext);
 
-  // seguridad extra
   if (!ctx) {
     return <Navigate to="/" replace />;
   }

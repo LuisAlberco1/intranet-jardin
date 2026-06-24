@@ -25,6 +25,8 @@ export default function Comunicados() {
     setDestacado(false);
   };
 
+  // Crea un nuevo comunicado y limpia el formulario.
+  // Agrega un nuevo comunicado con los datos ingresados en el formulario.
   const agregar = () => {
     if (!titulo || !descripcion || !categoria) return;
 
@@ -41,10 +43,12 @@ export default function Comunicados() {
     limpiarFormulario();
   };
 
+  // Elimina un comunicado por su id.
   const eliminar = (id: string) => {
     setComunicados((prev) => prev.filter((c) => c.id !== id));
   };
 
+  // Carga la información del comunicado en el formulario para editar.
   const iniciarEdicion = (c: Comunicado) => {
     setEditandoId(c.id);
     setTitulo(c.titulo);
@@ -53,6 +57,8 @@ export default function Comunicados() {
     setDestacado(c.destacado);
   };
 
+  // Guarda los cambios en un comunicado existente.
+  // Guarda los cambios de edición en un comunicado.
   const guardarEdicion = () => {
     if (!editandoId) return;
 
@@ -68,6 +74,9 @@ export default function Comunicados() {
     limpiarFormulario();
   };
 
+  // Filtra la lista de comunicados por título o categoría.
+  // Filtra la lista de comunicados por título o categoría.
+  // Filtra comunicados por título o categoría para la búsqueda.
   const listaFiltrada = comunicados.filter((c) => {
     const q = busqueda.toLowerCase();
     return (
@@ -151,7 +160,7 @@ export default function Comunicados() {
           </div>
         </div>
 
-        {/* LIST */}
+        {/* LISTA DE COMUNICADOS */}
         <div className="list-section">
           <div className="list-header">
             <h2>Lista de Comunicados</h2>

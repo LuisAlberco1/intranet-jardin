@@ -6,6 +6,8 @@ import { AuthProvider } from "./context/AuthContext";
 import { DataProvider } from "./context/DataContext";
 import "./styles/global.css";
 
+// Punto de entrada de la aplicación. Envuelve App con BrowserRouter y
+// los providers de autenticación y datos.
 ReactDOM.createRoot(
   document.getElementById("root")!
 ).render(
