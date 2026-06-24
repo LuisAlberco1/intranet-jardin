@@ -52,8 +52,7 @@ export default function Login() {
     }
 
     login({
-      nombre: usuarioEncontrado.nombre,
-      rol: usuarioEncontrado.rol,
+      user: usuarioEncontrado.user,
     });
 
     navigate("/dashboard");
@@ -63,7 +62,7 @@ export default function Login() {
     <div className="login-page">
       <div className="login-header">
         <div className="header-content">
-          <div className="school-icon">🏫</div>
+          <img src="/logo.png" alt="Logo Jardín" className="login-logo" />
           <h1>INTRANET</h1>
           <p>JARDÍN INFANTIL</p>
         </div>

@@ -77,68 +77,154 @@ export default function Comunicados() {
   });
 
   return (
-    <div>
-      <h1>Comunicados</h1>
+    <div className="page-container">
+      <div className="page-header">
+        <h1>📢 Comunicados</h1>
+        <p>Administra y gestiona todos los comunicados internos</p>
+      </div>
 
-      <input
-        placeholder="Título"
-        value={titulo}
-        onChange={(e) => setTitulo(e.target.value)}
-      />
+      <div className="page-content">
+        {/* FORM */}
+        <div className="form-section">
+          <h2>{editandoId ? "Editar" : "Nuevo"} Comunicado</h2>
 
-      <input
-        placeholder="Descripción"
-        value={descripcion}
-        onChange={(e) => setDescripcion(e.target.value)}
-      />
+          <div className="form-group">
+            <label>Título</label>
+            <input
+              type="text"
+              placeholder="Ej: Cierre por feriado"
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
+            />
+          </div>
 
-      <input
-        placeholder="Categoría"
-        value={categoria}
-        onChange={(e) => setCategoria(e.target.value)}
-      />
+          <div className="form-group">
+            <label>Descripción</label>
+            <textarea
+              placeholder="Contenido del comunicado..."
+              value={descripcion}
+              onChange={(e) => setDescripcion(e.target.value)}
+            />
+          </div>
 
-      <label>
-        Destacado:
-        <input
-          type="checkbox"
-          checked={destacado}
-          onChange={(e) => setDestacado(e.target.checked)}
-        />
-      </label>
+          <div className="form-group">
+            <label>Categoría</label>
+            <input
+              type="text"
+              placeholder="Ej: Administrativo, Actividades, etc."
+              value={categoria}
+              onChange={(e) => setCategoria(e.target.value)}
+            />
+          </div>
 
-      {editandoId ? (
-        <button onClick={guardarEdicion}>Guardar cambios</button>
-      ) : (
-        <button onClick={agregar}>Agregar</button>
-      )}
+          <div className="form-checkbox">
+            <input
+              type="checkbox"
+              id="destacado"
+              checked={destacado}
+              onChange={(e) => setDestacado(e.target.checked)}
+            />
+            <label htmlFor="destacado">Marcar como destacado</label>
+          </div>
 
-      <hr />
-
-      <input
-        placeholder="Buscar"
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-      />
-
-      <hr />
-
-      {listaFiltrada.map((c) => (
-        <div key={c.id}>
-          <h3>{c.titulo}</h3>
-          <p>{c.descripcion}</p>
-          <p>Categoría: {c.categoria}</p>
-          <p>{new Date(c.fecha).toLocaleDateString()}</p>
-          <p>{c.destacado ? "Destacado" : "Normal"}</p>
-
-          <button onClick={() => iniciarEdicion(c)}>Editar</button>
-          <button onClick={() => eliminar(c.id)}>Eliminar</button>
-
-          <Link to={`/comunicado/${c.id}`}>
-            <button>Ver detalle</button>
-          </Link>
+          <div className="form-buttons">
+            {editandoId ? (
+              <>
+                <button className="btn-primary" onClick={guardarEdicion}>
+                  Guardar cambios
+                </button>
+                <button
+                  className="btn-secondary"
+                  onClick={() => {
+                    setEditandoId(null);
+                    limpiarFormulario();
+                  }}
+                >
+                  Cancelar
+                </button>
+              </>
+            ) : (
+              <button className="btn-primary" onClick={agregar}>
+                Crear comunicado
+              </button>
+            )}
+          </div>
         </div>
-      ))}
+
+        {/* LIST */}
+        <div className="list-section">
+          <div className="list-header">
+            <h2>Lista de Comunicados</h2>
+            <input
+              type="text"
+              className="search-box"
+              placeholder="🔍 Buscar comunicados..."
+              value={busqueda}
+              onChange={(e) => setBusqueda(e.target.value)}
+            />
+          </div>
+
+          {listaFiltrada.length === 0 ? (
+            <div className="empty-state">
+              <p>📭 No hay comunicados aún</p>
+            </div>
+          ) : (
+            <div className="list-items">
+              {listaFiltrada.map((c) => (
+                <div key={c.id} className="list-item">
+                  <div className="list-item-header">
+                    <h3 className="list-item-title">
+                      {c.destacado && "⭐ "}
+                      {c.titulo}
+                    </h3>
+                    <div style={{ display: 'flex', gap: '8px' }}>
+                      <span
+                        style={{
+                          background: '#dbeafe',
+                          color: '#0c4a6e',
+                          padding: '4px 10px',
+                          borderRadius: '12px',
+                          fontSize: '12px',
+                          fontWeight: '600',
+                        }}
+                      >
+                        {c.categoria}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="list-item-meta">
+                    <span>📅 {new Date(c.fecha).toLocaleDateString()}</span>
+                    {c.destacado && <span>⭐ Destacado</span>}
+                  </div>
+
+                  <p className="list-item-content">{c.descripcion}</p>
+
+                  <div className="list-item-actions">
+                    <button
+                      className="btn-small btn-small-edit"
+                      onClick={() => iniciarEdicion(c)}
+                    >
+                      Editar
+                    </button>
+                    <button
+                      className="btn-small btn-small-delete"
+                      onClick={() => eliminar(c.id)}
+                    >
+                      Eliminar
+                    </button>
+                    <Link to={`/comunicado/${c.id}`} style={{ textDecoration: 'none' }}>
+                      <button className="btn-small btn-small-edit">
+                        Ver detalle
+                      </button>
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

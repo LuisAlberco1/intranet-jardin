@@ -11,6 +11,10 @@ import ProtectedRoute from "./routes/ProtectedRoute";
 import Navbar from "./components/Navbar";
 import { AuthContext } from "./context/AuthContext";
 
+import "./styles/navbar.css";
+import "./styles/dashboard.css";
+import "./styles/pages.css";
+
 function App() {
   const ctx = useContext(AuthContext);
 

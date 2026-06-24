@@ -19,8 +19,9 @@ export default function Navbar() {
 
   return (
     <div className="navbar">
-      <div>
-        <b>🏫 Intranet Jardín</b>
+      <div className="navbar-brand">
+        <img src="/logo.png" alt="Logo Jardín" className="navbar-logo" />
+        <b>Intranet Jardín</b>
       </div>
 
       <div className="nav-links">
@@ -43,13 +44,11 @@ export default function Navbar() {
 
       <div className="nav-user">
         <span>
-          {user?.nombre}
-          {" - "}
-          {user?.rol}
+          {user?.user}
         </span>
 
         <button onClick={handleLogout}>
-          Salir
+          Cerrar sesión
         </button>
       </div>
     </div>
