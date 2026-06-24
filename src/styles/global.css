@@ -1,66 +1,106 @@
-/* GLOBAL STYLES - KEEP IT SIMPLE */
-
-/* These classes are maintained for backward compatibility */
+/* Contenedor general para páginas */
 .container {
   padding: 20px;
 }
 
+/* Tarjeta reutilizable con fondo blanco */
 .card {
   background: white;
   padding: 20px;
   border-radius: 12px;
   border: 1px solid #ddd;
+
+  /* Sombra suave */
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
 
+/* Grid base reutilizable */
 .grid {
   display: grid;
   gap: 15px;
 }
 
+/* Grid de 3 columnas */
 .grid-3 {
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Línea separadora */
 hr {
   margin: 20px 0;
   border: none;
+
+  /* Línea superior gris */
   border-top: 1px solid #ddd;
 }
 
+
+/* Contenedor enlaces navbar */
 .nav-links {
   display: flex;
+
+  /* Espacio entre enlaces */
   gap: 20px;
 }
 
+/* Contenedor usuario navbar */
 .nav-user {
   display: flex;
+
   gap: 10px;
+
+  /* Centra verticalmente */
   align-items: center;
 }
 
-/* LOGIN */
+
+/* ================= LOGIN ================= */
+
+
+/* Contenedor principal login */
 .login-container {
+
+  /* Altura completa de pantalla */
   height: 100vh;
+
   display: flex;
+
+  /* Centrado horizontal */
   justify-content: center;
+
+  /* Centrado vertical */
   align-items: center;
 }
 
+/* Tarjeta del formulario login */
 .login-card {
+
+  /* Ancho fijo */
   width: 350px;
+
   background: white;
+
   padding: 30px;
+
   border-radius: 10px;
+
   border: 1px solid #ddd;
+
+  /* Sombra suave */
   box-shadow: 0 2px 6px rgba(0,0,0,0.05);
 }
 
+/* Formulario login */
 .login-form {
+
+  /* Elementos uno debajo del otro */
   display: flex;
   flex-direction: column;
 }
 
+/* Mensaje de error */
 .error {
+
+  /* Texto rojo */
   color: red;
 }

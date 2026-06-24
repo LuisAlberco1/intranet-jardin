@@ -1,40 +1,46 @@
-/* DASHBOARD PAGE */
+/* Fondo y espacio general de toda la página dashboard */
 .dashboard-page {
   min-height: calc(100vh - 70px);
-  background: #f8fafc;
+  background: #c7dff7;
   padding: 40px 20px;
 }
 
+/* Contenedor del encabezado */
 .dashboard-header {
   max-width: 1200px;
   margin: 0 auto 40px;
 }
 
+/* Título principal del dashboard */
 .dashboard-header h1 {
-  font-size: 36px;
-  color: #1e293b;
+  font-size: 60px;
+  color: #020202;
   margin: 0 0 20px;
   display: flex;
   align-items: center;
   gap: 12px;
 }
 
+/* Texto secundario debajo del título */
 .dashboard-header p {
-  font-size: 16px;
-  color: #64748b;
+  font-size: 20px;
+  color: #6a7e9b;
   margin: 0;
 }
 
+/* Contenedor principal del contenido */
 .dashboard-container {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-/* SUMMARY CARDS */
+
+/* Sección de tarjetas resumen */
 .summary-section {
   margin-bottom: 50px;
 }
 
+/* Título de la sección resumen */
 .summary-section h2 {
   font-size: 20px;
   color: #1e293b;
@@ -42,6 +48,7 @@
   font-weight: 600;
 }
 
+/* Grid automático de tarjetas */
 .cards-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -49,6 +56,7 @@
   margin-bottom: 40px;
 }
 
+/* Tarjeta individual */
 .summary-card {
   background: white;
   padding: 30px 20px;
@@ -60,11 +68,13 @@
   border-top: 4px solid #3b82f6;
 }
 
+/* Animación al pasar mouse */
 .summary-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
+/* Número grande de la tarjeta */
 .summary-card h3 {
   font-size: 42px;
   color: #3b82f6;
@@ -72,6 +82,7 @@
   font-weight: 700;
 }
 
+/* Texto pequeño de la tarjeta */
 .summary-card p {
   font-size: 14px;
   color: #64748b;
@@ -79,13 +90,15 @@
   font-weight: 500;
 }
 
-/* MODULES SECTION */
+
+/* Grid para módulos */
 .modules-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   gap: 24px;
 }
 
+/* Tarjeta de módulo */
 .module-card {
   background: white;
   border-radius: 12px;
@@ -98,11 +111,13 @@
   flex-direction: column;
 }
 
+/* Efecto hover módulo */
 .module-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
+/* Parte superior azul del módulo */
 .module-card-header {
   background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
   color: white;
@@ -114,18 +129,21 @@
   justify-content: center;
 }
 
+/* Título del módulo */
 .module-card h3 {
   font-size: 24px;
   margin: 0 0 10px;
   font-weight: 700;
 }
 
+/* Descripción del módulo */
 .module-card p {
   font-size: 14px;
   margin: 0;
   opacity: 0.9;
 }
 
+/* Parte inferior del módulo */
 .module-card-footer {
   padding: 15px 20px;
   background: #f1f5f9;
@@ -135,11 +153,13 @@
   font-weight: 500;
 }
 
+/* Hover footer */
 .module-card:hover .module-card-footer {
   background: #e2e8f0;
 }
 
-/* ACTION BUTTONS */
+
+/* Contenedor de botones */
 .dashboard-actions {
   display: flex;
   gap: 12px;
@@ -148,6 +168,7 @@
   flex-wrap: wrap;
 }
 
+/* Botón dashboard */
 .btn-dashboard {
   padding: 12px 24px;
   background: #ef4444;
@@ -160,62 +181,168 @@
   transition: all 0.3s ease;
 }
 
+/* Hover botón */
 .btn-dashboard:hover {
   background: #dc2626;
   transform: translateY(-2px);
   box-shadow: 0 6px 16px rgba(239, 68, 68, 0.3);
 }
 
-/* RESPONSIVE */
+
+/* Responsive para móviles */
 @media (max-width: 768px) {
+
+  /* Reduce espacio general */
   .dashboard-page {
     padding: 20px;
   }
 
+  /* Reduce tamaño título */
   .dashboard-header h1 {
     font-size: 28px;
   }
 
+  /* Reduce tamaño grid */
   .cards-grid {
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
     gap: 15px;
   }
 
+  /* Reduce números */
   .summary-card h3 {
     font-size: 32px;
   }
 
+  /* Una columna */
   .modules-grid {
     grid-template-columns: 1fr;
   }
 
+  /* Reduce espacio interno */
   .module-card-header {
     padding: 20px;
   }
 
+  /* Reduce texto */
   .module-card h3 {
     font-size: 20px;
   }
 }
 
-/* Upcoming cards layout */
-.upcoming-cards { background: transparent; }
-.cards-row { display: flex; gap: 20px; flex-wrap: wrap; }
-.card { background: white; border-radius: 12px; box-shadow: 0 8px 24px rgba(15,23,42,0.06); flex: 1 1 320px; overflow: hidden; display: flex; flex-direction: column; }
-.card-header { display: flex; align-items: center; justify-content: space-between; padding: 18px 20px; border-bottom: 1px solid #eef2ff; }
-.card-header h3 { margin: 0; font-size: 18px; }
-.card-sub { font-size: 13px; color: #64748b; }
-.card-controls { display: flex; align-items: flex-start; flex-direction: column; gap: 6px; }
-.card-controls-column { align-items: flex-start; }
-.card-input-label { font-size: 13px; color: #475569; font-weight: 600; }
-.card-input { width: 72px; padding: 6px 8px; border-radius: 8px; border: 1px solid #e6eef8; background: #fbfdff; }
-.card-body { padding: 14px 18px; display: flex; flex-direction: column; gap: 10px; }
-.card-empty { color: #64748b; padding: 12px 0; }
-.card-item { padding: 12px; border-radius: 10px; background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%); border: 1px solid #eef2ff; }
-.card-item-title { font-weight: 700; color: #0f172a; }
-.card-item-meta { font-size: 13px; color: #475569; margin-top: 4px; }
-.card-item-desc { font-size: 13px; color: #64748b; margin-top: 6px; }
 
+/* Fondo contenedor próximas actividades */
+.upcoming-cards {
+  background: transparent;
+}
+
+/* Fila de tarjetas */
+.cards-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Tarjeta individual */
+.card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(15,23,42,0.06);
+  flex: 1 1 320px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Encabezado tarjeta */
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid #eef2ff;
+}
+
+/* Título tarjeta */
+.card-header h3 {
+  margin: 0;
+  font-size: 18px;
+}
+
+/* Texto pequeño */
+.card-sub {
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Contenedor controles */
+.card-controls {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Etiqueta input */
+.card-input-label {
+  font-size: 13px;
+  color: #475569;
+  font-weight: 600;
+}
+
+/* Input pequeño */
+.card-input {
+  width: 72px;
+  padding: 6px 8px;
+  border-radius: 8px;
+  border: 1px solid #e6eef8;
+  background: #fbfdff;
+}
+
+/* Cuerpo tarjeta */
+.card-body {
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Mensaje vacío */
+.card-empty {
+  color: #64748b;
+  padding: 12px 0;
+}
+
+/* Item interno */
+.card-item {
+  padding: 12px;
+  border-radius: 10px;
+  background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%);
+  border: 1px solid #eef2ff;
+}
+
+/* Título item */
+.card-item-title {
+  font-weight: 700;
+  color: #0f172a;
+}
+
+/* Información secundaria */
+.card-item-meta {
+  font-size: 13px;
+  color: #475569;
+  margin-top: 4px;
+}
+
+/* Descripción */
+.card-item-desc {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 6px;
+}
+
+/* Responsive tarjetas */
 @media (max-width: 780px) {
-  .cards-row { flex-direction: column; }
+  .cards-row {
+    flex-direction: column;
+  }
 }
