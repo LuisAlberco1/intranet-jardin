@@ -2,14 +2,18 @@ import { useContext, useState } from "react";
 import { DataContext } from "../context/DataContext";
 import type { Actividad } from "../types/Actividad";
 
+// Página de actividades que permite crear, editar, eliminar y buscar actividades programadas.
 export default function Actividades() {
   const ctx = useContext(DataContext);
 
+  // Si el contexto no está disponible, no renderiza nada.
   if (!ctx) return null;
 
+  // Extrae las actividades y la función para actualizar la lista desde el contexto.
   const { actividades, setActividades } = ctx;
 
-  const [nombre, setNombre] = useState("");
+  // Estados locales para manejar los campos del formulario y la búsqueda.
+  const [nombre, setNombre] = useState(""); 
   const [fecha, setFecha] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [responsable, setResponsable] = useState("");
@@ -17,12 +21,12 @@ export default function Actividades() {
 
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState("");
-  const hoy = new Date().toISOString().split("T")[0];
-
+  const hoy = new Date().toISOString().split("T")[0]; 
   // Fecha mínima para evitar actividades en el pasado.
 
   // Fecha mínima para evitar actividades con fecha pasada.
 
+  // Limpia los campos del formulario y el error.
   const limpiar = () => {
     setNombre("");
     setFecha("");
@@ -39,12 +43,14 @@ export default function Actividades() {
       return;
     }
 
+    // Valida que la fecha de la actividad sea futura.
     const fechaActividad = new Date(fecha);
     if (fechaActividad < new Date()) {
       setError("La actividad debe programarse en una fecha futura.");
       return;
     }
 
+    // Crea un nuevo objeto de actividad con un ID único y los datos del formulario.
     const nueva: Actividad = {
       id: crypto.randomUUID(),
       nombre,
@@ -53,14 +59,17 @@ export default function Actividades() {
       responsable,
     };
 
+    // Agrega la nueva actividad a la lista en el contexto y limpia el formulario.
     setActividades((prev) => [...prev, nueva]);
     limpiar();
   };
 
+  // Elimina una actividad por su ID.
   const eliminar = (id: string) => {
     setActividades((prev) => prev.filter((a) => a.id !== id));
   };
 
+  // Carga los datos de una actividad en el formulario para editarla.
   const iniciarEdicion = (a: Actividad) => {
     setEditandoId(a.id);
     setNombre(a.nombre);
@@ -74,17 +83,20 @@ export default function Actividades() {
   const guardar = () => {
     if (!editandoId) return;
 
+    // Valida que todos los campos estén completos y que la fecha sea futura.
     if (!nombre || !fecha || !descripcion || !responsable) {
       setError("Por favor completa todos los campos.");
       return;
     }
 
+    // Valida que la fecha de la actividad sea futura.
     const fechaActividad = new Date(fecha);
     if (fechaActividad < new Date()) {
       setError("La actividad debe programarse en una fecha futura.");
       return;
     }
 
+    // Actualiza la actividad en la lista del contexto reemplazando la actividad editada.
     setActividades((prev) =>
       prev.map((a) =>
         a.id === editandoId
@@ -92,20 +104,21 @@ export default function Actividades() {
           : a
       )
     );
-
+// Limpia el formulario y sale del modo edición.
     setEditandoId(null);
     limpiar();
   };
 
   // Filtra las actividades por nombre o responsable.
   const listaFiltrada = actividades.filter((a) => {
-    const q = busqueda.toLowerCase();
+    const q = busqueda.toLowerCase(); // Convierte la búsqueda a minúsculas para comparación insensible a mayúsculas.
     return (
-      a.nombre.toLowerCase().includes(q) ||
-      a.responsable.toLowerCase().includes(q)
+      a.nombre.toLowerCase().includes(q) || // Filtra por nombre o responsable
+      a.responsable.toLowerCase().includes(q) 
     );
   });
 
+  // Renderiza la página de actividades con el formulario y la lista de actividades.
   return (
     <div className="page-container">
       <div className="page-header">

@@ -17,13 +17,11 @@
 
 /* ================= HEADER ================= */
 
-
 /* Encabezado superior */
 .login-header {
   text-align: center;
   color: white;
   padding: 40px 20px 20px;
-
   /* Evita que se reduzca */
   flex-shrink: 0;
 }
@@ -32,10 +30,8 @@
 .login-logo {
   width: 90px;
   height: 90px;
-
   /* Ajusta imagen sin deformarla */
   object-fit: contain;
-
   margin-bottom: 16px;
 }
 
@@ -50,7 +46,6 @@
   font-size: 60px;
   margin-bottom: 15px;
   display: inline-block;
-
   /* Animación flotante */
   animation: float 3s ease-in-out infinite;
 }
@@ -71,10 +66,8 @@
   font-size: 42px;
   font-weight: 700;
   margin: 10px 0;
-
   /* Espacio entre letras */
   letter-spacing: 2px;
-
   /* Sombra texto */
   text-shadow: 2px 2px 4px rgba(0,0,0,.2);
 }
@@ -91,18 +84,13 @@
 
 /* ================= CONTENIDO ================= */
 
-
 /* Zona central */
 .login-main {
   flex: 1;
-
   display: flex;
-
   justify-content: center;
   align-items: center;
-
   padding: 30px 20px;
-
   position: relative;
   z-index: 2;
 }
@@ -114,22 +102,14 @@
 /* Tarjeta blanca principal */
 .login-card {
   background: white;
-
   border-radius: 24px;
-
   padding: 45px 35px;
-
   /* Sombra grande */
   box-shadow: 0 20px 60px rgba(0,0,0,.25);
-
   max-width: 350px;
-
   width: 100%;
-
   text-align: center;
-
   position: relative;
-
   /* Animación entrada */
   animation: slideUp .5s ease-out;
 }
@@ -186,32 +166,25 @@
 
 
 /* ================= FORMULARIO ================= */
-
-
 /* Formulario login */
 .login-form {
   margin:25px 0;
-
   display:flex;
   flex-direction:column;
-
   gap:15px;
 }
 
 /* Grupo input + icono */
 .input-group {
   position:relative;
-
   display:flex;
   align-items:center;
-
   gap:10px;
 }
 
 /* Iconos de inputs */
 .input-icon {
   font-size:20px;
-
   /* Evita encogerse */
   flex-shrink:0;
 }
@@ -219,32 +192,21 @@
 /* Inputs */
 .login-form input {
   flex:1;
-
   padding:14px 16px;
-
   border:2px solid #e5e5e5;
-
   border-radius:10px;
-
   font-size:15px;
-
   color:#222;
-
   font-family:inherit;
-
   transition:all .3s ease;
-
   background:#f9f9f9;
 }
 
 /* Efecto al seleccionar input */
 .login-form input:focus {
   outline:none;
-
   border-color:#1e3a5f;
-
   background:white;
-
   box-shadow:0 0 0 3px rgba(30,58,95,.1);
 }
 
@@ -255,48 +217,32 @@
 
 
 /* ================= BOTÓN ================= */
-
-
 /* Botón iniciar sesión */
 .btn-login {
   padding:14px 20px;
-
   background:#1e3a8a;
-
   color:white;
-
   border:none;
-
   border-radius:10px;
-
   font-size:16px;
-
   font-weight:600;
-
   cursor:pointer;
-
   transition:all .3s ease;
-
   margin-top:10px;
-
   letter-spacing:.5px;
-
   font-family:inherit;
 }
 
 /* Hover botón */
 .btn-login:hover {
   background:#1e3a5f;
-
   transform:translateY(-2px);
-
   box-shadow:0 8px 20px rgba(30,58,95,.3);
 }
 
 /* Al presionar botón */
 .btn-login:active {
   transform:translateY(0);
-
   box-shadow:0 4px 12px rgba(30,58,95,.2);
 }
 
@@ -307,21 +253,13 @@
 /* Caja mensaje error */
 .error-message {
   background:#fee;
-
   color:#c33;
-
   padding:12px;
-
   border-radius:8px;
-
   border-left:4px solid #c33;
-
   font-size:14px;
-
   margin:15px 0;
-
   text-align:left;
-
   /* Animación temblor */
   animation:shake .3s ease-in-out;
 }
@@ -331,11 +269,9 @@
   0%,100%{
     transform:translateX(0);
   }
-
   25%{
     transform:translateX(-5px);
   }
-
   75%{
     transform:translateX(5px);
   }
@@ -348,101 +284,77 @@
 /* Pie de página */
 .login-footer {
   background:#1e3a5f;
-
   color:white;
-
   padding:30px 20px;
-
   text-align:center;
-
   flex-shrink:0;
-
   position:relative;
-
   z-index:2;
-
   border-top:5px solid #2d5581;
 }
 
 /* Contenedor footer */
 .footer-content p {
   margin:8px 0;
-
   font-size:14px;
-
   opacity:.9;
 }
 
 /* Primer texto footer */
 .footer-content p:first-child {
   font-size:15px;
-
   font-weight:500;
-
   opacity:.95;
 }
 
 /* Último texto footer */
 .footer-content p:last-child {
   font-size:12px;
-
   opacity:.7;
-
   margin-top:15px;
 }
 
 
 /* ================= RESPONSIVE ================= */
-
 @media (max-width:600px){
-
   /* Reduce espacio encabezado */
   .login-header{
     padding:30px 20px 15px;
   }
-
   /* Reduce título */
   .login-header h1{
     font-size:32px;
   }
-
   /* Reduce texto */
   .login-header p{
     font-size:14px;
   }
-
   /* Reduce icono */
   .school-icon{
     font-size:50px;
   }
-
   /* Reduce tarjeta */
   .login-card{
     padding:35px 25px;
     margin:20px;
   }
-
   /* Reduce icono */
   .card-icon{
     font-size:70px;
   }
-
   /* Reduce título */
   .login-card h2{
     font-size:24px;
   }
-
   /* Reduce subtítulo */
   .login-card .subtitle{
     font-size:13px;
   }
-
   /* Reduce input */
   .login-form input{
     padding:12px 14px;
     font-size:14px;
   }
-
   /* Reduce botón */
   .btn-login{
     padding:12px 16px;
@@ -451,18 +363,15 @@
 }
 
 @media (max-width:400px){
-
   /* Reduce aún más título */
   .login-header h1{
     font-size:28px;
     letter-spacing:1px;
   }
-
   /* Reduce tarjeta */
   .login-card{
     padding:30px 20px;
   }
-
   /* Reduce icono */
   .card-icon{
     font-size:60px;

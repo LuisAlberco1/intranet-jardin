@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/login.css";
 
+// Componente de Login que permite a los usuarios autenticarse en la intranet del jardín infantil.
 type Credencial = {
   user: string;
   pass: string;
@@ -10,10 +11,11 @@ type Credencial = {
   rol: string;
 };
 
+// Componente de Login que permite a los usuarios autenticarse en la intranet del jardín infantil.
 export default function Login() {
   // Acceso al contexto de autenticación para ejecutar el login.
   const ctx = useContext(AuthContext);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); 
 
   // Estado local para los campos del formulario y posibles errores.
   const [usuario, setUsuario] = useState("");
@@ -42,20 +44,24 @@ export default function Login() {
     e.preventDefault();
     setError("");
 
+    // Validación básica de campos vacíos.
     if (!usuario.trim() || !password.trim()) {
       setError("Completa todos los campos");
       return;
     }
 
+    // Busca el usuario en las credenciales de prueba.
     const usuarioEncontrado = credenciales.find(
       (u) => u.user === usuario && u.pass === password
     );
 
+    // Si no se encuentra el usuario, muestra un mensaje de error.
     if (!usuarioEncontrado) {
       setError("Credenciales incorrectas");
       return;
     }
 
+    // Si se encuentra el usuario, ejecuta la función de login del contexto.
     login({
       user: usuarioEncontrado.user,
     });
@@ -64,13 +70,14 @@ export default function Login() {
     navigate("/dashboard");
   };
 
+  // Renderiza la interfaz de login con campos de usuario y contraseña, y muestra errores si los hay.
   return (
     <div className="login-page">
       <div className="login-header">
         <div className="header-content">
           <img src="/logo.png" alt="Logo Jardín" className="login-logo" />
-          <h1>INTRANET</h1>
-          <p>JARDÍN INFANTIL</p>
+          <h1>Intranet Jardín Infantil</h1>
+          <p>Plataforma de Gestión y Comunicación Interna del Jardín</p>
         </div>
       </div>
 

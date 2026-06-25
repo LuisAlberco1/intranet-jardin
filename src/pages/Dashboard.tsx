@@ -3,20 +3,25 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { DataContext } from "../context/DataContext";
 
+// Página principal del dashboard. Muestra un resumen de comunicados, reuniones y actividades, así como accesos rápidos a los módulos de gestión.
 export default function Dashboard() {
   const authCtx = useContext(AuthContext);
   const dataCtx = useContext(DataContext);
 
+  // Si alguno de los contextos no está disponible, no renderiza nada.
   if (!authCtx || !dataCtx) {
     return null;
   }
 
+  // Extrae el usuario autenticado del contexto de autenticación.
   const { user } = authCtx;
 
+  // Si no hay usuario autenticado, no renderiza nada.
   if (!user) {
     return null;
   }
 
+  // Extrae los datos de comunicados, reuniones y actividades del contexto de datos.
   const {
     comunicados,
     reuniones,
@@ -31,28 +36,30 @@ export default function Dashboard() {
   const ahora = useMemo(() => new Date(), []);
 
   // Filtra las reuniones que ocurren dentro del rango seleccionado.
-  const proximasReuniones = reuniones.filter((r) => {
+  const proximasReuniones = reuniones.filter((r) => { 
     try {
-      const fechaStr = r.fecha ?? "";
-      const horaStr = r.hora ? `T${r.hora}` : "";
-      const dt = new Date(fechaStr + horaStr);
-      const max = new Date(ahora.getTime() + diasReuniones * 24 * 60 * 60 * 1000);
-      return dt >= ahora && dt <= max;
-    } catch {
-      return false;
+      const fechaStr = r.fecha ?? ""; // Fecha de la reunión en formato YYYY-MM-DD
+      const horaStr = r.hora ? `T${r.hora}` : ""; // Hora de la reunión en formato HH:MM, si existe
+      const dt = new Date(fechaStr + horaStr); // Combina fecha y hora para crear un objeto Date
+      const max = new Date(ahora.getTime() + diasReuniones * 24 * 60 * 60 * 1000); // Calcula la fecha máxima permitida según el rango de días
+      return dt >= ahora && dt <= max; // Devuelve true si la reunión está dentro del rango de fechas
+    } catch { // Si ocurre un error al parsear la fecha, se considera que la reunión no es válida para el rango.
+      return false; // Manejo de errores: si la fecha no es válida, se excluye la reunión de la lista de próximas reuniones.
     }
   });
 
+  // Filtra las actividades que ocurren dentro del rango seleccionado.
   const proximasActividades = actividades.filter((a) => {
     try {
-      const dt = new Date(a.fecha);
-      const max = new Date(ahora.getTime() + diasActividades * 24 * 60 * 60 * 1000);
-      return dt >= ahora && dt <= max;
-    } catch {
-      return false;
+      const dt = new Date(a.fecha); // Convierte la fecha de la actividad a un objeto Date
+      const max = new Date(ahora.getTime() + diasActividades * 24 * 60 * 60 * 1000); // Calcula la fecha máxima permitida según el rango de días
+      return dt >= ahora && dt <= max; // Devuelve true si la actividad está dentro del rango de fechas
+    } catch { 
+      return false; 
     }
   });
 
+  // Renderiza la página del dashboard con resumen de datos y accesos rápidos a los módulos.
   return (
     <div className="dashboard-page">
       {/* Cabecera de bienvenida con el usuario autenticado */}

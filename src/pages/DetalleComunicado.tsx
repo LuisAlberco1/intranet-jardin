@@ -3,12 +3,15 @@ import { useEffect, useState, useContext } from "react";
 import type { Comunicado } from "../types/Comunicado";
 import { DataContext } from "../context/DataContext";
 
+// Página de detalle de un comunicado específico. Muestra la información completa del comunicado seleccionado.
 export default function DetalleComunicado() {
   const { id } = useParams<{ id: string }>();
 
+  // Estado local para almacenar el comunicado cargado y el estado de carga.
   const [comunicado, setComunicado] = useState<Comunicado | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Acceso al contexto de datos para obtener la lista de comunicados.
   const dataCtx = useContext(DataContext);
 
   // Carga el comunicado por id desde el contexto o localStorage.
@@ -19,6 +22,7 @@ export default function DetalleComunicado() {
         const listaCtx = dataCtx?.comunicados;
         const encontradoCtx = listaCtx?.find((c) => c.id === id) ?? null;
 
+        // Si se encuentra en el contexto, se establece directamente.
         if (encontradoCtx) {
           setComunicado(encontradoCtx);
           return;
@@ -31,14 +35,15 @@ export default function DetalleComunicado() {
           return;
         }
 
+        // Parsear la lista de comunicados desde localStorage y buscar el comunicado por id.
         const lista: Comunicado[] = JSON.parse(data);
-        const encontrado = lista.find((c) => c.id === id) ?? null;
+        const encontrado = lista.find((c) => c.id === id) ?? null; // Si no se encuentra, retorna null
         setComunicado(encontrado);
-      } catch (error) {
+      } catch (error) { // Manejo de errores al cargar el comunicado
         console.error("Error cargando comunicado:", error);
         setComunicado(null);
-      } finally {
-        setLoading(false);
+      } finally { // Asegura que el estado de carga se actualice al finalizar la operación
+        setLoading(false); // Se marca como finalizada la carga, independientemente de si se encontró el comunicado o no.
       }
     };
 
@@ -46,7 +51,8 @@ export default function DetalleComunicado() {
     // Dependemos de id y del contexto para reaccionar si la lista cambia
   }, [id, dataCtx?.comunicados]);
 
-  if (loading) {
+  if (loading) { // Muestra un mensaje de carga mientras se obtiene el comunicado
+    // Renderiza un mensaje de carga mientras se obtiene el comunicado
     return (
       <div className="page-container">
         <div style={{ textAlign: 'center', padding: '60px 20px' }}>
@@ -58,7 +64,8 @@ export default function DetalleComunicado() {
     );
   }
 
-  if (!comunicado) {
+  if (!comunicado) { // Muestra un mensaje de error si no se encuentra el comunicado
+    // Renderiza un mensaje de error si no se encuentra el comunicado
     return (
       <div className="page-container">
         <div style={{ textAlign: 'center', padding: '60px 20px' }}>
@@ -70,7 +77,8 @@ export default function DetalleComunicado() {
     );
   }
 
-  return (
+  // Renderiza la información completa del comunicado si se encuentra
+  return ( 
     <div className="page-container">
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
         <div style={{ marginBottom: '30px' }}>

@@ -1,7 +1,7 @@
 /* Contenedor principal de toda la página */
 .page-container {
   min-height: calc(100vh - 70px);
-  background: #f8fafc;
+  background: transparent;
   padding: 40px 20px;
 }
 
@@ -39,10 +39,11 @@
 
 /* Caja del formulario */
 .form-section {
-  background: white;
+  background: rgba(255, 255, 255, 0.55);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(148, 163, 184, 0.2);
   height: fit-content;
   position: sticky;
   top: 100px;
@@ -209,10 +210,11 @@
 
 /* Caja que contiene la lista */
 .list-section {
-  background: white;
+  background: rgba(255, 255, 255, 0.55);
   padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+  box-shadow: 0 2px 8px rgba(0,0,0,.06);
+  border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
 /* Encabezado superior de la lista */
@@ -245,7 +247,7 @@
 
 /* Tarjeta individual */
 .list-item {
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.45);
   padding: 20px;
   border-radius: 8px;
 }

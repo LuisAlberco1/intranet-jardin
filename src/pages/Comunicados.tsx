@@ -3,11 +3,14 @@ import { Link } from "react-router-dom";
 import { DataContext } from "../context/DataContext";
 import type { Comunicado } from "../types/Comunicado";
 
+// Página de administración de comunicados. Permite crear, editar, eliminar y buscar comunicados.
 export default function Comunicados() {
   const ctx = useContext(DataContext);
 
+  // Si el contexto no está disponible, no renderiza nada.
   if (!ctx) return null;
 
+  // Extrae los comunicados y la función para actualizar la lista desde el contexto.
   const { comunicados, setComunicados } = ctx;
 
   const [titulo, setTitulo] = useState("");
@@ -18,6 +21,7 @@ export default function Comunicados() {
   const [editandoId, setEditandoId] = useState<string | null>(null);
   const [busqueda, setBusqueda] = useState("");
 
+  // Limpia los campos del formulario.
   const limpiarFormulario = () => {
     setTitulo("");
     setDescripcion("");
@@ -30,6 +34,7 @@ export default function Comunicados() {
   const agregar = () => {
     if (!titulo || !descripcion || !categoria) return;
 
+    // Crea un nuevo objeto de comunicado con un ID único y los datos del formulario.
     const nuevo: Comunicado = {
       id: crypto.randomUUID(),
       titulo,
@@ -39,6 +44,7 @@ export default function Comunicados() {
       destacado,
     };
 
+    // Agrega el nuevo comunicado a la lista en el contexto y limpia el formulario.
     setComunicados((prev) => [...prev, nuevo]);
     limpiarFormulario();
   };
@@ -70,6 +76,7 @@ export default function Comunicados() {
       )
     );
 
+    // Limpia el formulario y sale del modo edición.
     setEditandoId(null);
     limpiarFormulario();
   };
@@ -77,10 +84,10 @@ export default function Comunicados() {
   // Filtra la lista de comunicados por título o categoría.
   // Filtra la lista de comunicados por título o categoría.
   // Filtra comunicados por título o categoría para la búsqueda.
-  const listaFiltrada = comunicados.filter((c) => {
-    const q = busqueda.toLowerCase();
+  const listaFiltrada = comunicados.filter((c) => { 
+    const q = busqueda.toLowerCase(); // Convierte la búsqueda a minúsculas para comparación insensible a mayúsculas.
     return (
-      c.titulo.toLowerCase().includes(q) ||
+      c.titulo.toLowerCase().includes(q) || // Filtra por título o categoría
       c.categoria.toLowerCase().includes(q)
     );
   });

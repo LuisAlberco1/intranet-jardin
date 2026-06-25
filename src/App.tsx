@@ -18,9 +18,10 @@ import "./styles/pages.css";
 // Componente principal que define la estructura de rutas y controla
 // si el usuario debe ir al login o al dashboard.
 function App() {
+  // Acceso al contexto de autenticación para determinar si hay un usuario logueado.
   const ctx = useContext(AuthContext);
-
-  const user = ctx?.user;
+  // Extrae el usuario actual (si existe).
+  const user = ctx?.user; 
 
   return (
     <>
@@ -37,7 +38,7 @@ function App() {
         />
 
         {/* Dashboard: vista principal del usuario autenticado. */}
-        <Route
+        <Route //Ruta protegida que solo permite acceso si hay usuario logueado.
           path="/dashboard"
           element={
             <ProtectedRoute>
@@ -47,7 +48,7 @@ function App() {
         />
 
         {/* Comunicados: módulo para crear, editar y buscar comunicados. */}
-        <Route
+        <Route //Ruta protegida que solo permite acceso si hay usuario logueado.
           path="/comunicados"
           element={
             <ProtectedRoute>
@@ -57,7 +58,7 @@ function App() {
         />
 
         {/* Detalle del comunicado seleccionado. */}
-        <Route
+        <Route //Ruta protegida que solo permite acceso si hay usuario logueado.
           path="/comunicado/:id"
           element={
             <ProtectedRoute>
@@ -67,7 +68,7 @@ function App() {
         />
 
         {/* Reuniones: módulo para administrar reuniones y validar fechas futuras. */}
-        <Route
+        <Route //Ruta protegida que solo permite acceso si hay usuario logueado.
           path="/reuniones"
           element={
             <ProtectedRoute>
@@ -77,7 +78,7 @@ function App() {
         />
 
         {/* Actividades: módulo para planificar actividades del jardín. */}
-        <Route
+        <Route //Ruta protegida que solo permite acceso si hay usuario logueado.
           path="/actividades"
           element={
             <ProtectedRoute>

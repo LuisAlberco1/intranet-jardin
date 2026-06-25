@@ -12,7 +12,7 @@ export default function Navbar() {
     return null;
   }
 
-  const { user, logout } = ctx;
+  const { user, logout } = ctx; // Extraemos el usuario actual y la función de logout del contexto.
 
   // Cierra la sesión y redirige al login.
   const handleLogout = () => {
@@ -20,6 +20,7 @@ export default function Navbar() {
     navigate("/");
   };
 
+  // Renderiza la barra de navegación con enlaces a las secciones y el usuario autenticado.
   return (
     <div className="navbar">
       <div className="navbar-brand">
@@ -52,7 +53,7 @@ export default function Navbar() {
           {user?.user}
         </span>
 
-        <button onClick={handleLogout}>
+        <button onClick={handleLogout}> 
           Cerrar sesión
         </button>
       </div>
