@@ -3,74 +3,50 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import "../styles/login.css";
 
-// Componente de Login que permite a los usuarios autenticarse en la intranet del jardín infantil.
-type Credencial = {
-  user: string;
-  pass: string;
-  nombre: string;
-  rol: string;
-};
-
-// Componente de Login que permite a los usuarios autenticarse en la intranet del jardín infantil.
 export default function Login() {
-  // Acceso al contexto de autenticación para ejecutar el login.
   const ctx = useContext(AuthContext);
-  const navigate = useNavigate(); 
+  const navigate = useNavigate();
 
-  // Estado local para los campos del formulario y posibles errores.
-  const [usuario, setUsuario] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  // Muestra mensaje si el contexto de autenticación no está disponible.
   if (!ctx) {
     return <h2>Error cargando autenticación</h2>;
   }
 
   const { login } = ctx;
 
-  // Credenciales de prueba utilizadas para autenticación local.
-  const credenciales: Credencial[] = [
-    {
-      user: "admin",
-      pass: "1234",
-      nombre: "Administrador",
-      rol: "Admin",
-    },
-  ];
-
-  // Maneja el envío del formulario de inicio de sesión.
-  const handleLogin = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
 
-    // Validación básica de campos vacíos.
-    if (!usuario.trim() || !password.trim()) {
+    if (!email.trim() || !password.trim()) {
       setError("Completa todos los campos");
       return;
     }
 
-    // Busca el usuario en las credenciales de prueba.
-    const usuarioEncontrado = credenciales.find(
-      (u) => u.user === usuario && u.pass === password
-    );
-
-    // Si no se encuentra el usuario, muestra un mensaje de error.
-    if (!usuarioEncontrado) {
-      setError("Credenciales incorrectas");
-      return;
+    try {
+      await login(email, password);
+      navigate("/dashboard");
+    } catch (err: any) {
+      // errores Firebase más comunes
+      switch (err.code) {
+        case "auth/user-not-found":
+          setError("Usuario no encontrado");
+          break;
+        case "auth/wrong-password":
+          setError("Contraseña incorrecta");
+          break;
+        case "auth/invalid-email":
+          setError("Email inválido");
+          break;
+        default:
+          setError("Error al iniciar sesión");
+      }
     }
-
-    // Si se encuentra el usuario, ejecuta la función de login del contexto.
-    login({
-      user: usuarioEncontrado.user,
-    });
-
-    // Redirige al dashboard luego de autenticarse.
-    navigate("/dashboard");
   };
 
-  // Renderiza la interfaz de login con campos de usuario y contraseña, y muestra errores si los hay.
   return (
     <div className="login-page">
       <div className="login-header">
@@ -88,20 +64,17 @@ export default function Login() {
           <h2>Bienvenido 👋</h2>
           <p className="subtitle">Ingresa tus credenciales para continuar</p>
 
-          {/* Formulario de autenticación local con validación básica. */}
           <form className="login-form" onSubmit={handleLogin}>
-            {/* Campo de usuario con control de estado */}
             <div className="input-group">
-              <span className="input-icon">👤</span>
+              <span className="input-icon">📧</span>
               <input
-                type="text"
-                placeholder="Usuario"
-                value={usuario}
-                onChange={(e) => setUsuario(e.target.value)}
+                type="email"
+                placeholder="Correo electrónico"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
 
-            {/* Campo de contraseña con control de estado */}
             <div className="input-group">
               <span className="input-icon">🔒</span>
               <input
@@ -112,7 +85,6 @@ export default function Login() {
               />
             </div>
 
-            {/* Botón de envío para autenticar el usuario */}
             <button type="submit" className="btn-login">
               ➤ Ingresar
             </button>

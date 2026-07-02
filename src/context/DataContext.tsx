@@ -1,69 +1,158 @@
-import { createContext, useState, useEffect } from "react";
-import type { ReactNode, Dispatch, SetStateAction } from "react";
+import { createContext, useEffect, useState } from "react";
+import type { ReactNode } from "react";
+
+import {
+  collection,
+  onSnapshot,
+  addDoc,
+  deleteDoc,
+  updateDoc,
+  doc,
+} from "firebase/firestore";
+
+import { db } from "../firebase/config";
 
 import type { Actividad } from "../types/Actividad";
 import type { Comunicado } from "../types/Comunicado";
 import type { Reunion } from "../types/Reunion";
 
-// Tipo para el contexto de datos que incluye listas de actividades, reuniones y comunicados, así como funciones para actualizar estas listas.
-type DataContextType = { 
+type DataContextType = {
   actividades: Actividad[];
   reuniones: Reunion[];
   comunicados: Comunicado[];
 
-  setActividades: Dispatch<SetStateAction<Actividad[]>>; // Función para actualizar la lista de actividades.
-  setReuniones: Dispatch<SetStateAction<Reunion[]>>; // Función para actualizar la lista de reuniones.
-  setComunicados: Dispatch<SetStateAction<Comunicado[]>>; // Función para actualizar la lista de comunicados.
+  addActividad: (a: Omit<Actividad, "id">) => Promise<void>;
+  updateActividad: (id: string, data: Partial<Actividad>) => Promise<void>;
+  deleteActividad: (id: string) => Promise<void>;
+
+  addReunion: (r: Omit<Reunion, "id">) => Promise<void>;
+  updateReunion: (id: string, data: Partial<Reunion>) => Promise<void>;
+  deleteReunion: (id: string) => Promise<void>;
+
+  addComunicado: (c: Omit<Comunicado, "id">) => Promise<void>;
+  updateComunicado: (id: string, data: Partial<Comunicado>) => Promise<void>;
+  deleteComunicado: (id: string) => Promise<void>;
 };
 
-// Creación del contexto de datos con un valor inicial nulo.
 export const DataContext = createContext<DataContextType | null>(null);
 
-// Proveedor de datos que envuelve la aplicación y proporciona el contexto de datos a todos los componentes hijos.
 export function DataProvider({ children }: { children: ReactNode }) {
-  const [actividades, setActividades] = useState<Actividad[]>([]); // Estado para almacenar la lista de actividades.
-  const [reuniones, setReuniones] = useState<Reunion[]>([]); // Estado para almacenar la lista de reuniones.
-  const [comunicados, setComunicados] = useState<Comunicado[]>([]); // Estado para almacenar la lista de comunicados.
+  const [actividades, setActividades] = useState<Actividad[]>([]);
+  const [reuniones, setReuniones] = useState<Reunion[]>([]);
+  const [comunicados, setComunicados] = useState<Comunicado[]>([]);
 
-  // Carga inicial de datos desde localStorage cuando el provider monta.
-  useEffect(() => { // Intenta cargar las listas
-    try {
-      setActividades(JSON.parse(localStorage.getItem("actividades") || "[]")); // Carga las actividades desde localStorage o inicializa como un array vacío.
-      setReuniones(JSON.parse(localStorage.getItem("reuniones") || "[]"));  // Carga las reuniones desde localStorage o inicializa como un array vacío.
-      setComunicados(JSON.parse(localStorage.getItem("comunicados") || "[]")); // Carga los comunicados desde localStorage o inicializa como un array vacío.
-    } catch { // En caso de error al parsear los datos, inicializa las listas como vacías.
-      setActividades([]); // Inicializa la lista de actividades como vacía.
-      setReuniones([]); // Inicializa la lista de reuniones como vacía.
-      setComunicados([]); // Inicializa la lista de comunicados como vacía.
-    }
-  }, []); // Dependencia vacía para que se ejecute solo una vez al montar el componente.
-
-  // Actualiza localStorage cada vez que cambian las listas en memoria.
-  useEffect(() => {
-    localStorage.setItem("actividades", JSON.stringify(actividades));
-  }, [actividades]);
+  // ======================
+  // 🔥 REALTIME LISTENERS
+  // ======================
 
   useEffect(() => {
-    localStorage.setItem("reuniones", JSON.stringify(reuniones));
-  }, [reuniones]);
+    const unsub = onSnapshot(collection(db, "actividades"), (snap) => {
+      setActividades(
+        snap.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as Omit<Actividad, "id">),
+        }))
+      );
+    });
+
+    return () => unsub();
+  }, []);
 
   useEffect(() => {
-    localStorage.setItem("comunicados", JSON.stringify(comunicados));
-  }, [comunicados]);
+    const unsub = onSnapshot(collection(db, "reuniones"), (snap) => {
+      setReuniones(
+        snap.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as Omit<Reunion, "id">),
+        }))
+      );
+    });
 
-  // Renderiza el proveedor de datos con el valor del contexto.
+    return () => unsub();
+  }, []);
+
+  useEffect(() => {
+    const unsub = onSnapshot(collection(db, "comunicados"), (snap) => {
+      setComunicados(
+        snap.docs.map((d) => ({
+          id: d.id,
+          ...(d.data() as Omit<Comunicado, "id">),
+        }))
+      );
+    });
+
+    return () => unsub();
+  }, []);
+
+  // ======================
+  // 🔥 CRUD ACTIVIDADES
+  // ======================
+
+  const addActividad = async (a: Omit<Actividad, "id">) => {
+    await addDoc(collection(db, "actividades"), a);
+  };
+
+  const updateActividad = async (id: string, data: Partial<Actividad>) => {
+    await updateDoc(doc(db, "actividades", id), data);
+  };
+
+  const deleteActividad = async (id: string) => {
+    await deleteDoc(doc(db, "actividades", id));
+  };
+
+  // ======================
+  // 🔥 CRUD REUNIONES
+  // ======================
+
+  const addReunion = async (r: Omit<Reunion, "id">) => {
+    await addDoc(collection(db, "reuniones"), r);
+  };
+
+  const updateReunion = async (id: string, data: Partial<Reunion>) => {
+    await updateDoc(doc(db, "reuniones", id), data);
+  };
+
+  const deleteReunion = async (id: string) => {
+    await deleteDoc(doc(db, "reuniones", id));
+  };
+
+  // ======================
+  // 🔥 CRUD COMUNICADOS
+  // ======================
+
+  const addComunicado = async (c: Omit<Comunicado, "id">) => {
+    await addDoc(collection(db, "comunicados"), c);
+  };
+
+  const updateComunicado = async (id: string, data: Partial<Comunicado>) => {
+    await updateDoc(doc(db, "comunicados", id), data);
+  };
+
+  const deleteComunicado = async (id: string) => {
+    await deleteDoc(doc(db, "comunicados", id));
+  };
+
   return (
-    <DataContext.Provider 
-      value={{ // Proporciona el valor del contexto que incluye las listas y las funciones para actualizarlas.
-        actividades, 
-        setActividades, 
+    <DataContext.Provider
+      value={{
+        actividades,
         reuniones,
-        setReuniones,
         comunicados,
-        setComunicados,
+
+        addActividad,
+        updateActividad,
+        deleteActividad,
+
+        addReunion,
+        updateReunion,
+        deleteReunion,
+
+        addComunicado,
+        updateComunicado,
+        deleteComunicado,
       }}
     >
-      {children} 
+      {children}
     </DataContext.Provider>
   );
 }

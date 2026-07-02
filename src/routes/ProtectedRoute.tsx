@@ -3,23 +3,25 @@ import { useContext } from "react";
 import type { ReactNode } from "react";
 import { AuthContext } from "../context/AuthContext";
 
-// Componente de ruta protegida que verifica si el usuario está autenticado.
 type Props = {
   children: ReactNode;
 };
 
-// Ruta protegida que redirige al login si no hay usuario autenticado.
-export default function ProtectedRoute({
-  children,
-}: Props) { 
-  const ctx = useContext(AuthContext); 
+export default function ProtectedRoute({ children }: Props) {
+  const ctx = useContext(AuthContext);
 
   if (!ctx) {
     return <Navigate to="/" replace />;
   }
 
-  const { user } = ctx;
+  const { user, loading } = ctx;
 
+  // mientras Firebase verifica sesión
+  if (loading) {
+    return <p style={{ padding: 20 }}>Cargando...</p>;
+  }
+
+  // si no hay usuario autenticado
   if (!user) {
     return <Navigate to="/" replace />;
   }
